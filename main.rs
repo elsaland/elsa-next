@@ -1,5 +1,7 @@
 mod macro_util;
 mod modules;
+#[cfg(feature = "typescript")]
+mod strip;
 
 cfg_v8! {
   struct Runtime {
@@ -145,7 +147,11 @@ fn main() {
     .nth(1)
     .expect("Invalid invocation. Usage: crimson <filename>");
 
-  let source = std::fs::read_to_string(filename).expect("Failed to read file");
+  #[cfg(feature = "typescript")]
+  let source = strip::strip(&filename);
+
+  #[cfg(not(feature = "typescript"))]
+  let source = std::fs::read_to_string(&filename).expect("failed to read file");
 
   Runtime::new().eval(&source);
 }

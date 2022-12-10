@@ -47,6 +47,33 @@ ln -s python3.9 python3
 ln -s pip3.9 pip3
 ```
 
+## Size
+
+- Note: `jsc` is not bundled but linked dynamically. This will change in the
+  future and included it in the below table.
+
+Without typescript support:
+
+```
+┌───────┬───────────┬───────────┐
+│ (idx) │ feature   │ size      │
+├───────┼───────────┼───────────┤
+│     0 │ "v8"      │ "26.94MB" │
+│     2 │ "quickjs" │ "1.28MB"  │
+└───────┴───────────┴───────────┘
+```
+
+With typescript support:
+
+```
+┌───────┬───────────┬───────────┐
+│ (idx) │ feature   │ size      │
+├───────┼───────────┼───────────┤
+│     0 │ "v8"      │ "31.96MB" │
+│     2 │ "quickjs" │ "6.30MB"  │
+└───────┴───────────┴───────────┘
+```
+
 ## Authors
 
 [littledivy](http://github.com/littledivy) - Divy Srivastava
