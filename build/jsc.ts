@@ -50,7 +50,7 @@ export class JscGenerator implements Generator {
 }
 
 const todo = 'compile_error!("TODO: implement")';
-function parameterValues(ty: string) {
+function parameterValues(ty: string, i: number) {
   if (ty === "buffer") {
     return todo;
   }
@@ -58,7 +58,20 @@ function parameterValues(ty: string) {
     return "u64";
   }
   // skip scalar type validation, compiler will catch it
-  return ty;
+  return `JSValueToNumber(ctx, *(arguments.offset(${i} as _)), exception)`;
+}
+
+function makeReturn(type: string): string {
+  if (type === "void") {
+    return "JSValueMakeUndefined(ctx)";
+  }
+  if (type === "buffer") {
+    return todo;
+  }
+  if (type === "pointer") {
+    return todo;
+  }
+  return `JSValueMakeNumber(ctx, result as _)`;
 }
 
 export function generateBinding(
@@ -68,15 +81,20 @@ export function generateBinding(
     ctx: JSContextRef,
     _function: JSObjectRef,
     _this_object: JSObjectRef,
-    _argument_count: size_t,
-    _arguments: *const JSValueRef,
-    _exception: *mut JSValueRef,
+    argument_count: size_t,
+    arguments: *const JSValueRef,
+    exception: *mut JSValueRef,
 ) -> JSValueRef {
-  // ${parameters.map((p, i) => `let p${i} = ${parameterValues(p)}`).join(", ")}
-  // r#impl::${name}(${
+  assert!(argument_count == ${parameters.length});
+${
+    parameters.map((p, i) => `  let p${i} = ${parameterValues(p, i)};`).join(
+      ";\n",
+    )
+  }
+  let result = r#impl::${name}(${
     parameters.map((_, idx) => `p${idx} as _`).join(", ")
-  }) as _
-  JSValueMakeUndefined(ctx)
+  });
+  ${makeReturn(result)}
 }
   `;
 }

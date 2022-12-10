@@ -10,7 +10,7 @@ use_quickjs = ["quick-js"]
 use_jsc = ["rusty_jsc_sys"]
 use_spidermonkey = ["mozjs"]
 
-default = ["use_v8"]
+default = ["use_jsc"]
 
 [[bin]]
 name = "deno-lite"
