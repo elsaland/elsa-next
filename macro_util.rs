@@ -21,6 +21,17 @@ macro_rules! cfg_jsc {
 }
 
 #[macro_export]
+macro_rules! cfg_mozjs {
+  ($($item:item)*) => {
+      $(
+          #[cfg(feature = "use_spidermonkey")]
+          #[cfg_attr(docsrs, doc(cfg(feature = "use_spidermonkey")))]
+          $item
+      )*
+  }
+}
+
+#[macro_export]
 macro_rules! cfg_quickjs {
   ($($item:item)*) => {
       $(

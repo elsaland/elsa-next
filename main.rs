@@ -99,6 +99,29 @@ cfg_jsc! {
   }
 }
 
+cfg_mozjs! {
+  use mozjs::rust::{JSEngine, Runtime};
+  use mozjs::jsapi::{CallArgs, JSAutoRealm, JSContext, OnNewGlobalHookOption, Value};
+
+  struct Runtime {
+    engine: JSEngine,
+    runtime: Runtime,
+  }
+
+  impl Runtime {
+    pub fn new() -> Self {
+      let engine = JSEngine::init().unwrap();
+      let runtime = Runtime::new(engine.handle());
+      let context = runtime.cx();
+      Self { engine, runtime }
+    }
+
+    pub fn eval(&mut self, source: &str) {
+      todo!()
+    }
+  }
+}
+
 cfg_quickjs! {
   struct Runtime {
     context: quick_js::Context,

@@ -9,6 +9,7 @@ deno-lite is engine-agnostic. It has engine backends for:
 
 - V8
 - JavaScriptCore
+- SpiderMonkey
 - QuickJS
 
 ## Why not use spindle?
@@ -32,6 +33,19 @@ Key difference from crimson:
 
 - No common state
 - Not rust futures executor
+
+## Building
+
+You need python 3.9 (not 3.10) to build the spidermonkey backend.
+
+```shell
+# Warning: this may be destructive!
+brew install python@3.9
+cd $(dirname $(which python3.9))
+rm -f python3 pip3
+ln -s python3.9 python3
+ln -s pip3.9 pip3
+```
 
 ## Authors
 
