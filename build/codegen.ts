@@ -1,4 +1,5 @@
 import { QuickJsGenerator } from "./quickjs.ts";
+import { JscGenerator } from "./jsc.ts";
 import { V8Generator } from "./v8.ts";
 
 export interface Generator {
@@ -44,6 +45,7 @@ function ident(name: string) {
 const cfg: Record<string, Generator> = {
   cfg_v8: new V8Generator(),
   cfg_quickjs: new QuickJsGenerator(),
+  cfg_jsc: new JscGenerator(),
 };
 
 async function writeAndFormat(cfg: string, path: string, content: string) {
@@ -92,7 +94,7 @@ export async function main(modules: Module[]) {
 
     initRest += generator.moduleEnd();
     mod += initRest;
-    mod += `);\n`;
+    mod += `);\n\n`;
   }
 
   p.push(

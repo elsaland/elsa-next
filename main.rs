@@ -46,6 +46,59 @@ cfg_v8! {
   }
 }
 
+cfg_jsc! {
+  use rusty_jsc_sys::*;
+  use std::ffi::CString;
+
+  struct Runtime {
+    vm: JSContextGroupRef,
+    context: JSContextRef,
+  }
+
+  impl Drop for Runtime {
+    fn drop(&mut self) {
+      unsafe {
+        JSGlobalContextRelease(self.context as _);
+        JSContextGroupRelease(self.vm);
+      }
+    }
+  }
+
+  impl Runtime {
+    pub fn new() -> Self {
+      let vm = unsafe { JSContextGroupCreate() };
+      let context =
+          unsafe { JSGlobalContextCreateInGroup(vm, std::ptr::null_mut()) };
+
+      modules::setup_bindings(context);
+      Self { context, vm }
+    }
+
+    pub fn eval(&mut self, source: &str) {
+      let source = CString::new(source.as_bytes()).unwrap();
+      let source = unsafe { JSStringCreateWithUTF8CString(source.as_ptr()) };
+
+      let this_object = std::ptr::null_mut();
+      let source_url = std::ptr::null_mut();
+      let mut exception: JSValueRef = std::ptr::null_mut();
+      let value = unsafe {
+          JSEvaluateScript(
+              self.context,
+              source,
+              this_object,
+              source_url,
+              1,
+              &mut exception,
+          )
+      };
+
+      if unsafe { JSValueIsNull(self.context, value) } {
+        panic!("JS exception: {:?}", exception)
+      }
+    }
+  }
+}
+
 cfg_quickjs! {
   struct Runtime {
     context: quick_js::Context,

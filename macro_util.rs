@@ -10,6 +10,17 @@ macro_rules! cfg_v8 {
 }
 
 #[macro_export]
+macro_rules! cfg_jsc {
+  ($($item:item)*) => {
+      $(
+          #[cfg(feature = "use_jsc")]
+          #[cfg_attr(docsrs, doc(cfg(feature = "use_jsc")))]
+          $item
+      )*
+  }
+}
+
+#[macro_export]
 macro_rules! cfg_quickjs {
   ($($item:item)*) => {
       $(

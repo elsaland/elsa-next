@@ -10,10 +10,20 @@ crate::cfg_v8!(
     global
   }
 );
+
 crate::cfg_quickjs!(
   mod r#loop;
 
   pub fn setup_bindings(context: &quick_js::Context) {
     r#loop::init(context);
+  }
+);
+
+crate::cfg_jsc!(
+  mod r#loop;
+
+  pub fn setup_bindings(context: rusty_jsc_sys::JSContextRef) {
+    let global = unsafe { rusty_jsc_sys::JSContextGetGlobalObject(context) };
+    r#loop::init(global, context);
   }
 );
