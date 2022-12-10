@@ -1,0 +1,5 @@
+{
+  "tasks": {
+    "build": "./build/main.ts && cargo fmt && cargo build"
+  }
+}
