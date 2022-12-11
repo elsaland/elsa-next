@@ -12,6 +12,12 @@ deno-lite is engine-agnostic. It has engine backends for:
 - SpiderMonkey
 - QuickJS
 
+No module system, single file scripts only. I might implement ESM behind a
+feature flag in the future.
+
+TypeScript stripping support available behind `typescript` feature flag using
+`swc`. Typechecking done using `stc`.
+
 ## Why not use spindle?
 
 It only works on Linux. Unfortunately, making it work on macOS / windows is
@@ -73,6 +79,13 @@ With typescript support:
 │     2 │ "quickjs" │ "6.30MB"  │
 └───────┴───────────┴───────────┘
 ```
+
+## Guidelines for contributors
+
+- No serde. It's a performance killer. Serializing objects is discouraged. If
+  you need to pass untyped complex data, use the engine's `Value` type.
+- Typed data must always have inlined conversions using codegen in place.
+- Everything should be behind a compile time feature flag.
 
 ## Authors
 

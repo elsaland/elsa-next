@@ -96,7 +96,7 @@ function serdeV8Decl(ty: string, idx: number) {
          unsafe { store.add(view.byte_offset()) as _ }
        }
        Err(_) => {
-        let i: u64 = serde_v8::from_v8(scope, args.get(${idx})).unwrap();
+        let i: u64 = args.get(${idx}).number_value(scope).unwrap() as u64;
         i as *const u8 as _
        }
      };`;
@@ -111,13 +111,13 @@ function serdeV8Decl(ty: string, idx: number) {
         let store = buffer.data() as *mut u8;
         unsafe { store.add(view.byte_offset()) as _ }        
       } else {
-        let i = serde_v8::from_v8::<u64>(scope, args.get(${idx})).unwrap();
+        let i = args.get(${idx}).number_value(scope).unwrap() as u64;
         i as *const u8 as _
       }
     };`;
   }
 
-  return `    let p${idx} = serde_v8::from_v8(scope, args.get(${idx})).unwrap();`;
+  return `    let p${idx} = args.get(${idx}).uint32_value(scope).unwrap() as _;`;
 }
 
 export function generateBinding(
@@ -158,6 +158,6 @@ ${parameters.map(serdeV8Decl).join("\n")}
     let result = r#impl::${name}(${
     parameters.map((_, i) => `p${i}`).join(", ")
   });
-    rv.set(serde_v8::to_v8(scope, result).unwrap());
+    rv.set(v8::Number::new(scope, result as _).into());
   }\n`;
 }
