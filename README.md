@@ -3,9 +3,9 @@
 Small, baseline performant JavaScript runtime. If you want to answer, _how fast
 can JavaScript runtimes go?_. This is the place.
 
-We use deno-lite for benchmarking Deno internally.
+We use Elsa for benchmarking Deno internally.
 
-deno-lite is engine-agnostic. It has engine backends for:
+Elsa is engine-agnostic. It has engine backends for:
 
 - V8
 - JavaScriptCore
@@ -18,6 +18,26 @@ feature flag in the future.
 TypeScript stripping support available behind `typescript` feature flag using
 `swc`. Typechecking done using `stc`.
 
+## Why was this revived?
+
+I moved on to eventually work on Deno. We are using just-js/spindle/crimson for
+baseline comparison. I wanted to benchmark against many many possibilities. Elsa
+is an attempt to write a cross-platform engine-agnostic fast JavaScript runtime.
+
+Elsa is designed for:
+
+- Speed. TODO microbenchmarks.
+- Size. Smallest configuration is 0.3MB.
+- Tons of compile time feature flags. Don't include things in the binary you
+  don't need!
+
+  Ex: "I want to run a script _in V8_ that only uses _FS apis_, also don't want
+  to _type check_ but strip types":
+
+  `cargo build --no-default-features --features "use_v8,fs,typescript"`
+
+- Easy to embed. Offers a Rust crate and C API (with Go and Zig bindings).
+
 ## Why not use spindle?
 
 It only works on Linux. Unfortunately, making it work on macOS / windows is
@@ -29,10 +49,10 @@ This is in a way, an extension of crimson. Crison _was_ an internal research
 project to figure out a fast way to run Rust futures with a JS-first event loop
 like in just-js, spindle.
 
-Unlike crimson, deno-lite cannot run Rust futures. This is however still a
-JS-first event loop.
+Unlike crimson, Elsa cannot run Rust futures. This is however still a JS-first
+event loop.
 
-deno-lite copies the code-generation from Crimson which greately improves
+Elsa copies the code-generation from Crimson which greately improves
 maintainaiblity and unlike spindle, it is cross-platform.
 
 Key difference from crimson:
