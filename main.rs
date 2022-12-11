@@ -127,19 +127,44 @@ cfg_mozjs! {
 }
 
 cfg_quickjs! {
+  use libquickjs_sys as q;
+  use std::ffi::CString;
+
   struct Runtime {
-    context: quick_js::Context,
+    runtime: *mut q::JSRuntime,
+    context: *mut q::JSContext,
+  }
+
+  impl Drop for Runtime {
+    fn drop(&mut self) {
+        unsafe {
+            q::JS_FreeContext(self.context);
+            q::JS_FreeRuntime(self.runtime);
+        }
+    }
   }
 
   impl Runtime {
     pub fn new() -> Self {
-      let context = quick_js::Context::new().expect("failed to create context");
-      modules::setup_bindings(&context);
-      Self { context }
+      let runtime = unsafe { q::JS_NewRuntime() };
+      let context = unsafe { q::JS_NewContext(runtime) };
+      modules::setup_bindings(context);
+      Self { context, runtime }
     }
 
     pub fn eval(&mut self, source: &str) {
-      self.context.eval(source).unwrap();
+      let code = CString::new(source).unwrap();
+      let filename = CString::new("<eval>").unwrap();
+      let value_raw = unsafe {
+        q::JS_Eval(
+            self.context,
+            code.as_ptr(),
+            source.len() as _,
+            filename.as_ptr(),
+            q::JS_EVAL_TYPE_GLOBAL as i32,
+        )
+      };
+      unsafe { q::JS_FreeValue(self.context, value_raw) };
     }
   }
 }

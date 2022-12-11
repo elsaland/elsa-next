@@ -452,8 +452,8 @@ dependencies = [
 name = "deno-lite"
 version = "0.1.0"
 dependencies = [
+ "libquickjs-sys",
  "mozjs",
- "quick-js",
  "rusty_jsc_sys",
  "stc_ts_builtin_types",
  "stc_ts_env",
@@ -993,9 +993,9 @@ dependencies = [
 
 [[package]]
 name = "libquickjs-sys"
-version = "0.9.0"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3f0b24e9bd171b75ae0295bd428fb8fe58410fb23156e5f34a4657a70c3cee96"
+checksum = "9a5ed371d2ba0d9b4e09aebe7a0a90a729b27a83cf603dfdb53ad524f33b7d87"
 dependencies = [
  "cc",
  "copy_dir",
@@ -1414,16 +1414,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "quick-js"
-version = "0.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "19cb4cefcb00f4ab9b332664d06005a74f582ac16aa959c6ad5912957bd83e5f"
-dependencies = [
- "libquickjs-sys",
- "once_cell",
-]
-
-[[package]]
 name = "quote"
 version = "1.0.21"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1541,7 +1531,7 @@ dependencies = [
 [[package]]
 name = "rnode"
 version = "0.0.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "Inflector",
  "rnode_macros",
@@ -1553,7 +1543,7 @@ dependencies = [
 [[package]]
 name = "rnode_macros"
 version = "0.0.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "Inflector",
  "pmutil",
@@ -1770,7 +1760,7 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 [[package]]
 name = "stc_arc_cow"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "stc_visit",
  "swc_common",
@@ -1781,7 +1771,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_ast_rnode"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "num-bigint",
  "rnode",
@@ -1796,7 +1786,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_base_type_ops"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "rayon",
  "rnode",
@@ -1813,7 +1803,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_builtin_macro"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "Inflector",
  "pmutil",
@@ -1827,7 +1817,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_builtin_types"
 version = "0.0.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "fxhash",
  "indexmap",
@@ -1844,7 +1834,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_dts"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "fxhash",
  "retain_mut",
@@ -1861,7 +1851,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_dts_mutations"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "fxhash",
  "rnode",
@@ -1872,7 +1862,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_env"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "derivative",
  "parking_lot",
@@ -1894,7 +1884,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_errors"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "ansi_term",
  "backtrace",
@@ -1917,7 +1907,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_file_analyzer"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "ahash 0.7.6",
  "auto_impl",
@@ -1970,7 +1960,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_file_analyzer_macros"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "pmutil",
  "proc-macro2",
@@ -1985,7 +1975,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_generics"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "fxhash",
  "rayon",
@@ -2005,7 +1995,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_lang_server"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "anyhow",
  "clap",
@@ -2024,7 +2014,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_module_loader"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "ahash 0.7.6",
  "anyhow",
@@ -2057,7 +2047,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_ordering"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "either",
  "fxhash",
@@ -2078,7 +2068,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_passes"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "ahash 0.7.6",
  "fxhash",
@@ -2095,7 +2085,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_simple_ast_validations"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "rnode",
  "stc_ts_ast_rnode",
@@ -2112,7 +2102,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_storage"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "auto_impl",
  "fxhash",
@@ -2126,7 +2116,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_type_cache"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "rustc-hash",
  "stc_ts_ast_rnode",
@@ -2140,7 +2130,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_type_checker"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "dashmap 3.11.10",
  "fxhash",
@@ -2175,7 +2165,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_type_form"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "itertools",
  "stc_ts_ast_rnode",
@@ -2189,7 +2179,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_type_ops"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "indexmap",
  "rnode",
@@ -2209,7 +2199,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_types"
 version = "0.0.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "dashmap 3.11.10",
  "fxhash",
@@ -2241,7 +2231,7 @@ dependencies = [
 [[package]]
 name = "stc_ts_utils"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "dashmap 3.11.10",
  "fxhash",
@@ -2257,7 +2247,7 @@ dependencies = [
 [[package]]
 name = "stc_utils"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "ahash 0.7.6",
  "once_cell",
@@ -2271,7 +2261,7 @@ dependencies = [
 [[package]]
 name = "stc_visit"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "num-bigint",
  "stc_visit_macros",
@@ -2283,7 +2273,7 @@ dependencies = [
 [[package]]
 name = "stc_visit_macros"
 version = "0.1.0"
-source = "git+https://github.com/dudykr/stc.git#74871fce19b079debca7e2dc99f211d945339a90"
+source = "git+https://github.com/dudykr/stc.git?rev=23dd114529f10c5d645887c055cd396d1bfe7b11#23dd114529f10c5d645887c055cd396d1bfe7b11"
 dependencies = [
  "pmutil",
  "proc-macro2",

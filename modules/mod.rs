@@ -14,7 +14,7 @@ crate::cfg_v8!(
 crate::cfg_quickjs!(
   mod r#loop;
 
-  pub fn setup_bindings(context: &quick_js::Context) {
+  pub fn setup_bindings(context: *mut libquickjs_sys::JSContext) {
     r#loop::init(context);
   }
 );

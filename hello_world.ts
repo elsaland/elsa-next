@@ -1,1 +1,1 @@
-let a: number = add(1, 2);
+for (let i = 0; i < 1_000_000_000; i += 1) add(1, 2);
