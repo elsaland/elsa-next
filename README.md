@@ -1,4 +1,4 @@
-## Why?
+## Elsa
 
 Small, baseline performant JavaScript runtime. If you want to answer, _how fast
 can JavaScript runtimes go?_. This is the place.
@@ -20,9 +20,12 @@ TypeScript stripping support available behind `typescript` feature flag using
 
 ## Why was this revived?
 
-I moved on to eventually work on Deno. We are using just-js/spindle/crimson for
-baseline comparison. I wanted to benchmark against many many possibilities. Elsa
-is an attempt to write a cross-platform engine-agnostic fast JavaScript runtime.
+When it first started out, Elsa was a fun project. I eventually moved on to work
+on Deno.
+
+We were using just-js/spindle/crimson for baseline perf comparison. I wanted to
+benchmark against many many possibilities. Elsa is an attempt to write a
+cross-platform engine-agnostic fast JavaScript runtime.
 
 Elsa is designed for:
 
@@ -37,6 +40,8 @@ Elsa is designed for:
   `cargo build --no-default-features --features "use_v8,fs,typescript"`
 
 - Easy to embed. Offers a Rust crate and C API (with Go and Zig bindings).
+
+In time, most Elsa speed optimizations will make it to Deno.
 
 ## Why not use spindle?
 
