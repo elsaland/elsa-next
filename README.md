@@ -62,6 +62,20 @@ Key difference from crimson:
 
 ## Building
 
+To build Elsa, you need:
+
+- Deno (>=1.28.3)
+- Rust (>=1.66.0)
+
+```shell
+./build.ts debug # build debug. V8 without typescript support.
+./build.ts release # build release.
+./build.ts release-all # build release with all engine backends.
+
+./build.ts release --features "use_quickjs,typescript,typecheck" # build release with quickjs and full TS support.
+# ...
+```
+
 You need python 3.9 (not 3.10) to build the spidermonkey backend.
 
 ```shell
