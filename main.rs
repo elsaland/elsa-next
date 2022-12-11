@@ -6,14 +6,68 @@ mod modules;
 mod strip;
 
 cfg_v8! {
+  // use std::collections::HashMap;
+  // use std::rc::Rc;
+  // use std::cell::RefCell;
+
+  // type Specifier = String;
+
+  // #[derive(Default)]
+  // struct ModuleMap {
+  //   inner: HashMap<Specifier, v8::Global<v8::Module>>,
+  // }
+
   struct Runtime {
     isolate: v8::OwnedIsolate,
+    // module_map: Rc<RefCell<ModuleMap>>,
   }
 
   fn setup() {
     v8::V8::set_flags_from_string("--turbo_fast_api_calls");
     v8::V8::initialize_platform(v8::new_default_platform(0, false).make_shared());
     v8::V8::initialize();
+  }
+
+  pub fn module_resolve_callback<'s>(
+    context: v8::Local<'s, v8::Context>,
+    specifier: v8::Local<'s, v8::String>,
+    import_assertions: v8::Local<'s, v8::FixedArray>,
+    referrer: v8::Local<'s, v8::Module>,
+  ) -> Option<v8::Local<'s, v8::Module>> {
+    // SAFETY: `CallbackScope` can be safely constructed from `Local<Context>`
+    let scope = &mut unsafe { v8::CallbackScope::new(context) };
+
+    let specifier = specifier.to_rust_string_lossy(scope);
+
+    // WIP!!!
+    let source = std::fs::read_to_string(&specifier).unwrap();
+    let source = v8::String::new(scope, &source).unwrap();
+
+    let name_str = v8::String::new(scope, &specifier).unwrap();
+    let origin = module_origin(scope, name_str);
+
+    let source = v8::script_compiler::Source::new(source, Some(&origin));
+    let module = v8::script_compiler::compile_module(scope, source).unwrap();
+    Some(module)
+  }
+
+  pub fn module_origin<'a>(
+    s: &mut v8::HandleScope<'a>,
+    resource_name: v8::Local<'a, v8::String>,
+  ) -> v8::ScriptOrigin<'a> {
+    let source_map_url = v8::String::new(s, "").unwrap();
+    v8::ScriptOrigin::new(
+      s,
+      resource_name.into(),
+      0,
+      0,
+      false,
+      123,
+      source_map_url.into(),
+      true,
+      false,
+      true,
+    )
   }
 
   impl Runtime {
@@ -30,14 +84,17 @@ cfg_v8! {
       let context = v8::Context::new_from_template(scope, global);
 
       let scope = &mut v8::ContextScope::new(scope, context);
-      let source = v8::String::new(scope, source).unwrap();
+      let source_str = v8::String::new(scope, source).unwrap();
 
+      let name_str = v8::String::new(scope, "<eval>").unwrap();
+      let origin = module_origin(scope, name_str);
+
+      let source = v8::script_compiler::Source::new(source_str, Some(&origin));
       let try_catch = &mut v8::TryCatch::new(scope);
 
-      let script = v8::Script::compile(try_catch, source, None)
-        .expect("failed to compile script");
+      let module = v8::script_compiler::compile_module(try_catch, source);
 
-      if script.run(try_catch).is_none() {
+      if try_catch.has_caught() {
         let exception = try_catch.exception().unwrap();
         let exception_string = exception
           .to_string(try_catch)
@@ -46,6 +103,10 @@ cfg_v8! {
 
         panic!("{}", exception_string);
       }
+
+      let module = module.unwrap();
+      module.instantiate_module(try_catch, module_resolve_callback);
+      module.evaluate(try_catch).unwrap();
     }
   }
 }
