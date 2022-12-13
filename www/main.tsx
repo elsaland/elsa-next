@@ -6,6 +6,66 @@ import { router } from "rutt";
 import { h, html, tw } from "nanossr";
 import { css } from "twind/css";
 
+function Button({ children, ...props }) {
+  return (
+    <a
+      class={tw`inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md ${props.class}`}
+    >
+      {children}
+    </a>
+  );
+}
+
+function GitHub({ ...props }) {
+  return (
+    <a
+      target="_blank"
+      href="https://github.com/elsaland/elsa"
+      {...props}
+    >
+      <img
+        src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+        width="32"
+        height="32"
+      />
+    </a>
+  );
+}
+
+function IconGreenCheck() {
+  return (
+    <div class={tw`flex-shrink-0`}>
+      <svg
+        class={tw`h-6 w-6 text-green-500`}
+        x-description="Heroicon name: solid/check"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 13l4 4L19 7"
+        />
+      </svg>
+    </div>
+  );
+}
+
+const features = [
+  [
+    "",
+    "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.",
+  ],
+  [
+    "",
+    "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.",
+  ],
+];
+
 function Home() {
   return (
     <main
@@ -17,39 +77,55 @@ function Home() {
           Elsa is a JavaScript runtime.
         </p>
 
-        <div class={tw`mt-8`}>
-          <a
-            href="#"
-            class={tw`inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700`}
+        <div
+          class={tw`mt-8`}
+        >
+          <Button
+            class={tw`text-white bg-gradient-to-r from-blue-400 to-blue-500`}
+            style="backdrop-filter: blur(10px);"
           >
             Get started
-          </a>
+          </Button>
 
-          <a
-            href="#"
-            class={tw`ml-3 inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200`}
-          >
+          <Button class={tw`ml-3 text-indigo-700 bg-indigo-100`}>
             Learn more
-          </a>
+          </Button>
         </div>
+
+        <GitHub class={tw`absolute top-0 right-0 mt-4 mr-4`} />
       </div>
 
-      <div class={tw`mt-8`}>
-        <div class={tw`max-w-3xl mx-auto`}>
-          <div class={tw`bg-white shadow overflow-hidden sm:rounded-lg`}>
-            <div class={tw`px-4 py-5 sm:px-6`}>
-              <h3
-                class={tw`text-lg
+      {/* Features list */}
+      <div class={tw`mt-8 max-w-3xl mx-auto`}>
+        <h2 class={tw`text-2xl font-bold`}>Features</h2>
+        <ul class={tw`mt-4 space-y-4`}>
+          {features.map(([title, description]) => (
+            <li class={tw`flex`}>
+              <IconGreenCheck />
+              <p class={tw`ml-3 text-base text-gray-500`}>
+                {description}
+              </p>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div class={tw`mt-8 max-w-3xl mx-auto`}>
+        <div
+          class={tw`bg-white overflow-hidden sm:rounded-lg border border-gray-200`}
+        >
+          <div class={tw`px-4 py-5 sm:px-6`}>
+            <h3
+              class={tw`text-lg
 
 leading-6 font-medium text-gray-900`}
-              >
-                Recent activity
-              </h3>
-              <p class={tw`mt-1 max-w-2xl text-sm text-gray-500`}>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa
-                libero labore natus.
-              </p>
-            </div>
+            >
+              Recent activity
+            </h3>
+            <p class={tw`mt-1 max-w-2xl text-sm text-gray-500`}>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa
+              libero labore natus.
+            </p>
           </div>
         </div>
       </div>
@@ -63,64 +139,6 @@ leading-6 font-medium text-gray-900`}
           />
         </video>
       </div>
-
-      {/* Features list */}
-      <div class={tw`mt-8 max-w-3xl mx-auto`}>
-        <h2 class={tw`text-2xl font-bold`}>Features</h2>
-        <ul class={tw`mt-4 space-y-4`}>
-          <li class={tw`flex`}>
-            <div class={tw`flex-shrink-0`}>
-              <svg
-                class={tw`h-6 w-6 text-green-500`}
-                x-description="Heroicon name: solid/check"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-            <p class={tw`ml-3 text-base text-gray-500`}>
-              Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
-              lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
-              fugiat aliqua.
-            </p>
-          </li>
-
-          <li class={tw`flex`}>
-            <div class={tw`flex-shrink-0`}>
-              <svg
-                class={tw`h-6 w-6 text-green-500`}
-                x-description="Heroicon name: solid/check"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            </div>
-            <p class={tw`ml-3 text-base text-gray-500`}>
-              Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
-              lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
-              fugiat aliqua.
-            </p>
-          </li>
-        </ul>
-      </div>
     </main>
   );
 }
@@ -130,6 +148,19 @@ const options = {
     css`
       ${preflight}
       @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+      .frost::before {
+        content: "";
+        position: absolute;
+        background: inherit;
+        z-index: -1;
+        inset: 0;
+        filter: blur(10px);
+        margin: -20px;
+      }
+      .frost {
+        box-shadow: 0 0 10px 0 rgba(0, 0, 0, .4);  
+        z-index: 1;
+      }
       h1 {
         font-family: 'Pacifico';
       }`,
