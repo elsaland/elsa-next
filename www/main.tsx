@@ -133,11 +133,11 @@ leading-6 font-medium text-gray-900`}
       {/* Video */}
 
       <script
-        src="https://asciinema.org/a/545316.js"
+        src="https://asciinema.org/a/545330.js"
         data-theme="asciinema"
         data-size="big"
         data-autoplay="true"
-        id="asciicast-545316"
+        id="asciicast-545330"
         async
       >
       </script>
