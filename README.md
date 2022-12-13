@@ -12,9 +12,6 @@ Elsa is engine-agnostic. It has engine backends for:
 - SpiderMonkey
 - QuickJS
 
-No module system, single file scripts only. I might implement ESM behind a
-feature flag in the future.
-
 TypeScript stripping support available behind `typescript` feature flag using
 `swc`. Typechecking done using `stc`.
 

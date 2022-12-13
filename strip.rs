@@ -1,14 +1,23 @@
 use std::path::Path;
-use swc_common::{
-  self,
-  comments::SingleThreadedComments,
-  errors::{ColorConfig, Handler},
-  sync::Lrc,
-  Globals, Mark, SourceMap, GLOBALS,
-};
-use swc_ecma_codegen::{text_writer::JsWriter, Emitter};
-use swc_ecma_parser::{lexer::Lexer, Parser, StringInput, Syntax, TsConfig};
-use swc_ecma_transforms_base::{fixer::fixer, hygiene::hygiene, resolver};
+use swc_common::comments::SingleThreadedComments;
+use swc_common::errors::ColorConfig;
+use swc_common::errors::Handler;
+use swc_common::sync::Lrc;
+use swc_common::Globals;
+use swc_common::Mark;
+use swc_common::SourceMap;
+use swc_common::GLOBALS;
+use swc_common::{self};
+use swc_ecma_codegen::text_writer::JsWriter;
+use swc_ecma_codegen::Emitter;
+use swc_ecma_parser::lexer::Lexer;
+use swc_ecma_parser::Parser;
+use swc_ecma_parser::StringInput;
+use swc_ecma_parser::Syntax;
+use swc_ecma_parser::TsConfig;
+use swc_ecma_transforms_base::fixer::fixer;
+use swc_ecma_transforms_base::hygiene::hygiene;
+use swc_ecma_transforms_base::resolver;
 use swc_ecma_visit::FoldWith;
 
 pub fn strip(input: &str) -> String {

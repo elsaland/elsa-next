@@ -5,17 +5,9 @@ mod modules;
 #[cfg(feature = "typescript")]
 mod strip;
 
+mod module_map;
+
 cfg_v8! {
-  // use std::collections::HashMap;
-  // use std::rc::Rc;
-  // use std::cell::RefCell;
-
-  // type Specifier = String;
-
-  // #[derive(Default)]
-  // struct ModuleMap {
-  //   inner: HashMap<Specifier, v8::Global<v8::Module>>,
-  // }
 
   struct Runtime {
     isolate: v8::OwnedIsolate,

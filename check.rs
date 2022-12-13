@@ -1,16 +1,20 @@
 use stc_ts_builtin_types::Lib;
-use stc_ts_env::{Env, ModuleConfig, Rule};
+use stc_ts_env::Env;
+use stc_ts_env::ModuleConfig;
+use stc_ts_env::Rule;
 use stc_ts_file_analyzer::env::EnvFactory;
 use stc_ts_module_loader::resolvers::node::NodeResolver;
 use stc_ts_type_checker::Checker;
-use swc_common::{
-  errors::{ColorConfig, EmitterWriter, Handler},
-  FileName, SourceMap,
-};
+use swc_common::errors::ColorConfig;
+use swc_common::errors::EmitterWriter;
+use swc_common::errors::Handler;
+use swc_common::FileName;
+use swc_common::SourceMap;
 use swc_ecma_ast::EsVersion;
 use swc_ecma_parser::TsConfig;
 
-use std::{path::PathBuf, sync::Arc};
+use std::path::PathBuf;
+use std::sync::Arc;
 
 pub fn check(file: &str) {
   let cm = Arc::new(SourceMap::default());
