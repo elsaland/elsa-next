@@ -14,5 +14,4 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-for (let i = 0; i < 1_000_000_000; i += 1) add(1, 2);
+add(1, 3)

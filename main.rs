@@ -18,11 +18,10 @@
 #[cfg(feature = "typecheck")]
 mod check;
 mod macro_util;
+// mod module_map;
 mod modules;
 #[cfg(feature = "typescript")]
 mod strip;
-
-mod module_map;
 
 cfg_v8! {
 
@@ -40,8 +39,8 @@ cfg_v8! {
   pub fn module_resolve_callback<'s>(
     context: v8::Local<'s, v8::Context>,
     specifier: v8::Local<'s, v8::String>,
-    import_assertions: v8::Local<'s, v8::FixedArray>,
-    referrer: v8::Local<'s, v8::Module>,
+    _import_assertions: v8::Local<'s, v8::FixedArray>,
+    _referrer: v8::Local<'s, v8::Module>,
   ) -> Option<v8::Local<'s, v8::Module>> {
     // SAFETY: `CallbackScope` can be safely constructed from `Local<Context>`
     let scope = &mut unsafe { v8::CallbackScope::new(context) };
@@ -114,7 +113,7 @@ cfg_v8! {
       }
 
       let module = module.unwrap();
-      module.instantiate_module(try_catch, module_resolve_callback);
+      module.instantiate_module(try_catch, module_resolve_callback).unwrap();
       module.evaluate(try_catch).unwrap();
     }
   }

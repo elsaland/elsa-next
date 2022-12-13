@@ -22,6 +22,8 @@ import { checkLicense } from "https://deno.land/x/license_checker@v3.1.4/lib.ts"
 
 const mode = Deno.args[0] || "debug";
 
+$.setPrintCommand(true);
+
 async function allRelease() {
   await $`./build/main.ts && cargo fmt`;
   const sizeData = [];
@@ -37,9 +39,30 @@ function size() {
   return (s / 1024 / 1024).toFixed(2);
 }
 
+function maybeArgs() {
+  return Deno.args.slice(1);
+}
+
+async function debug() {
+  const maybeFlags = maybeArgs();
+  if (maybeFlags.length > 0) {
+    await $`./build/main.ts && cargo fmt && cargo build --no-default-features --features ${
+      maybeFlags.join(",")
+    }`;
+  } else {
+    await $`./build/main.ts && cargo fmt && cargo build`;
+  }
+}
+
 async function release() {
-  await $`./build/main.ts && cargo fmt && cargo build --release`;
-  console.log(`Size: ${size()}MB`);
+  const maybeFlags = maybeArgs();
+  if (maybeFlags.length > 0) {
+    await $`./build/main.ts && cargo fmt && cargo build --release --no-default-features --features ${
+      maybeFlags.join(",")
+    }`;
+  } else {
+    await $`./build/main.ts && cargo fmt && cargo build`;
+  }
 }
 
 const years = "2022";
@@ -92,7 +115,7 @@ async function check(fix: boolean) {
 }
 
 const actions: Record<string, () => Promise<void>> = {
-  "debug": () => $`./build/main.ts && cargo fmt && cargo build`,
+  "debug": debug,
   "release": release,
   "release-all": allRelease,
   "check-fix": () => check(true),

@@ -131,14 +131,16 @@ leading-6 font-medium text-gray-900`}
       </div>
 
       {/* Video */}
-      <div class={tw`mt-8 max-w-3xl mx-auto`}>
-        <video class={tw`w-full`} controls>
-          <source
-            src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
-            type="video/mp4"
-          />
-        </video>
-      </div>
+
+      <script
+        src="https://asciinema.org/a/545316.js"
+        data-theme="asciinema"
+        data-size="big"
+        data-autoplay="true"
+        id="asciicast-545316"
+        async
+      >
+      </script>
     </main>
   );
 }
@@ -148,19 +150,6 @@ const options = {
     css`
       ${preflight}
       @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
-      .frost::before {
-        content: "";
-        position: absolute;
-        background: inherit;
-        z-index: -1;
-        inset: 0;
-        filter: blur(10px);
-        margin: -20px;
-      }
-      .frost {
-        box-shadow: 0 0 10px 0 rgba(0, 0, 0, .4);  
-        z-index: 1;
-      }
       h1 {
         font-family: 'Pacifico';
       }`,

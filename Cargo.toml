@@ -1,5 +1,5 @@
 [package]
-name = "deno-lite"
+name = "elsa"
 version = "0.1.0"
 edition = "2021"
 authors = ["Divy Srivastava <dj.srivastava23@gmail.com>"]
@@ -16,7 +16,7 @@ typecheck = ["stc_ts_builtin_types", "stc_ts_env", "stc_ts_file_analyzer", "stc_
 default = ["use_v8"]
 
 [[bin]]
-name = "deno-lite"
+name = "elsa"
 path = "main.rs"
 
 [dependencies]

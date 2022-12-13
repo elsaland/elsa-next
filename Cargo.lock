@@ -449,29 +449,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "deno-lite"
-version = "0.1.0"
-dependencies = [
- "libquickjs-sys",
- "mozjs",
- "rusty_jsc_sys",
- "stc_ts_builtin_types",
- "stc_ts_env",
- "stc_ts_file_analyzer",
- "stc_ts_lang_server",
- "stc_ts_module_loader",
- "stc_ts_type_checker",
- "swc_common",
- "swc_ecma_ast",
- "swc_ecma_codegen",
- "swc_ecma_parser",
- "swc_ecma_transforms_base",
- "swc_ecma_transforms_typescript",
- "swc_ecma_visit",
- "v8",
-]
-
-[[package]]
 name = "derivative"
 version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -497,6 +474,29 @@ name = "either"
 version = "1.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "90e5c1c8368803113bf0c9584fc495a58b86dc8a29edbf8fe877d21d9507e797"
+
+[[package]]
+name = "elsa"
+version = "0.1.0"
+dependencies = [
+ "libquickjs-sys",
+ "mozjs",
+ "rusty_jsc_sys",
+ "stc_ts_builtin_types",
+ "stc_ts_env",
+ "stc_ts_file_analyzer",
+ "stc_ts_lang_server",
+ "stc_ts_module_loader",
+ "stc_ts_type_checker",
+ "swc_common",
+ "swc_ecma_ast",
+ "swc_ecma_codegen",
+ "swc_ecma_parser",
+ "swc_ecma_transforms_base",
+ "swc_ecma_transforms_typescript",
+ "swc_ecma_visit",
+ "v8",
+]
 
 [[package]]
 name = "encoding_c"
