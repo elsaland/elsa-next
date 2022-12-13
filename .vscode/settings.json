@@ -2,6 +2,7 @@
   "deno.enable": true,
   "deno.lint": true,
   "deno.unstable": true,
+  "deno.importMap": "./www/import_map.json",
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "denoland.vscode-deno",
   "deno.inlayHints.enumMemberValues.enabled": true,
