@@ -59,11 +59,19 @@ function IconGreenCheck() {
 const features = [
   [
     "",
-    "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.",
+    "Highly configurable. Tons of granular options to tweak every aspect of the runtime.",
   ],
   [
     "",
-    "Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat fugiat aliqua.",
+    "Embeddable. Rust crate and C API for embedding anywhere.",
+  ],
+  [
+    "",
+    "Engine agnostic. Choose your JS engine! V8, JavaScript Core, QuickJS, etc.",
+  ],
+  [
+    "",
+    "Speed. You choose your engine, Elsa provides optimized bindings for your engine.",
   ],
 ];
 
@@ -82,15 +90,23 @@ function Home() {
           class={tw`mt-8`}
         >
           <Button
+            class={tw`text-white text-indigo-700 bg-indigo-100`}
+            style="backdrop-filter: blur(10px);"
+          >
+            Coming soon...
+          </Button>
+          {
+            /*
+          <Button
             class={tw`text-white bg-gradient-to-r from-blue-400 to-blue-500`}
             style="backdrop-filter: blur(10px);"
           >
             Get started
           </Button>
-
-          <Button class={tw`ml-3 text-indigo-700 bg-indigo-100`}>
+            /* <Button class={tw`ml-3 text-indigo-700 bg-indigo-100`}>
             Learn more
-          </Button>
+          </Button> */
+          }
         </div>
 
         <GitHub class={tw`absolute top-0 right-0 mt-4 mr-4`} />
@@ -121,18 +137,23 @@ function Home() {
 
 leading-6 font-medium text-gray-900`}
             >
-              Recent activity
+              Preview
             </h3>
             <p class={tw`mt-1 max-w-2xl text-sm text-gray-500`}>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa
-              libero labore natus.
+              Elsa is currently in private preview. Shoot me an{" "}
+              <a
+                href="mailto:dj.srivastava23@gmail.com"
+                class={tw`text-indigo-600`}
+              >
+                email
+              </a>{" "}
+              with your GitHub username to gain access.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Video */}
-
+      {/* Small build walkthrough */}
       <script
         src="https://asciinema.org/a/545330.js"
         data-theme="asciinema"
