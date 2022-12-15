@@ -133,9 +133,7 @@ function Home() {
         >
           <div class={tw`px-4 py-5 sm:px-6`}>
             <h3
-              class={tw`text-lg
-
-leading-6 font-medium text-gray-900`}
+              class={tw`text-lg leading-6 font-medium text-gray-900`}
             >
               Preview
             </h3>
@@ -171,10 +169,25 @@ const options = {
   preflight: (preflight: string) =>
     css`
       ${preflight}
-      @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Ubuntu&display=swa');
       h1 {
         font-family: 'Pacifico';
-      }`,
+      }
+      main {
+        font-family: 'Ubuntu';
+      }
+      *::-webkit-scrollbar {
+        width: 10px;
+
+    }
+    *::-webkit-scrollbar-track {
+      background-color: #e5e7eb;
+      box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.3);
+    }
+    *::-webkit-scrollbar-thumb {
+      background-color: black;
+      outline: 1px solid slategrey;
+    }`,
 };
 
 function memoize<T>(fn: () => T): () => T {
