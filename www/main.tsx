@@ -139,6 +139,8 @@ leading-6 font-medium text-gray-900`}
             >
               Preview
             </h3>
+            {
+            /*
             <p class={tw`mt-1 max-w-2xl text-sm text-gray-500`}>
               Elsa is currently in private preview. Shoot me an{" "}
               <a
@@ -149,6 +151,7 @@ leading-6 font-medium text-gray-900`}
               </a>{" "}
               with your GitHub username to gain access.
             </p>
+            */}
           </div>
         </div>
       </div>
