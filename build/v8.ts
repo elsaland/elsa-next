@@ -50,7 +50,8 @@ export class V8Generator implements Generator {
     return `    global.set(
       v8::String::new(scope, "${name}").unwrap().into(),
       v8::FunctionTemplate::builder_raw(slow_${name}_.map_fn_to())
-        .build_fast(scope, &${name}_, None)
+        .build_fast(scope, &FAST_${name}, None, None, None)
+        // .build(scope)
         .into(), 
     );\n`;
   }
@@ -61,7 +62,7 @@ export class V8Generator implements Generator {
 }
 
 const fastAPITypeMapping: Record<string, string> = {
-  "()": "fast_api::Type::Void",
+  "void": "fast_api::Type::Void",
   "bool": "fast_api::Type::Bool",
   "i32": "fast_api::Type::Int32",
   "i64": "fast_api::Type::Int64",
@@ -70,6 +71,7 @@ const fastAPITypeMapping: Record<string, string> = {
   "u32": "fast_api::Type::Uint32",
   "u64": "fast_api::Type::Uint64",
   "pointer": "fast_api::Type::Uint64",
+  "string": "fast_api::Type::SeqOneByteString",
   "usize": "fast_api::Type::Uint64",
   "isize": "fast_api::Type::Int64",
 };
@@ -90,12 +92,25 @@ function fastValues(ty: string, idx: number) {
   if (ty === "pointer") {
     return `p${idx} as *const u8 as _`;
   }
+  if (ty == "string") {
+    return `unsafe { std::str::from_utf8_unchecked((*p${idx}).as_bytes()) }`;
+  }
   return `p${idx} as _`;
 }
 
+function toV8(result: string) {
+  if (result === "void") return "v8::undefined(scope).into()";
+
+  return `v8::Number::new(scope, result as _).into()`;
+}
+
 function fastParameterValue(ty: string) {
+  if (ty == "void") return "()";
   if (ty === "buffer") {
     return "*const fast_api::FastApiTypedArray<u8>";
+  }
+  if (ty === "string") {
+    return "*const fast_api::FastApiOneByteString";
   }
   if (ty === "pointer") {
     return "u64";
@@ -109,7 +124,7 @@ function serdeV8Decl(ty: string, idx: number) {
     return `let p${idx} = match v8::Local::<v8::ArrayBufferView>::try_from(args.get(${idx})) {
        Ok(view) => {
          let buffer = view.buffer(scope).unwrap();
-         let store = buffer.data() as *mut u8;
+         let store = buffer.data().unwrap().as_ptr() as *mut u8;
          unsafe { store.add(view.byte_offset()) as _ }
        }
        Err(_) => {
@@ -125,13 +140,18 @@ function serdeV8Decl(ty: string, idx: number) {
       if v.is_array_buffer_view() {
         let view = v8::Local::<v8::ArrayBufferView>::try_from(args.get(${idx})).unwrap();  
         let buffer = view.buffer(scope).unwrap();
-        let store = buffer.data() as *mut u8;
+        let store = buffer.data().unwrap().as_ptr() as *mut u8;
         unsafe { store.add(view.byte_offset()) as _ }        
       } else {
         let i = args.get(${idx}).number_value(scope).unwrap() as u64;
         i as *const u8 as _
       }
     };`;
+  }
+
+  if (ty === "string") {
+    return `    let p${idx}_tmp = args.get(${idx}).to_rust_string_lossy(scope);
+    let p${idx} = p${idx}_tmp.as_ref();`;
   }
 
   return `    let p${idx} = args.get(${idx}).uint32_value(scope).unwrap() as _;`;
@@ -142,28 +162,24 @@ export function generateBinding(
 ) {
   return `
   pub struct ${name}_;
-  impl fast_api::FastFunction for ${name}_ {
-    fn function(&self) -> *const std::ffi::c_void  {
-      fast_${name}_ as *const _
-    }
-    fn args(&self) -> &'static [fast_api::Type] {
-      &[ fast_api::Type::V8Value, ${parameters.map(fastParameters).join(", ")} ]
-    }
-    fn return_type(&self) -> fast_api::CType {
-      ${
+  const FAST_${name}: fast_api::FastFunction = fast_api::FastFunction::new(
+      &[ fast_api::Type::V8Value, ${
+    parameters.map(fastParameters).join(", ")
+  } ],
+  ${
     fastAPITypeMapping[result].replace(
       "fast_api::Type::",
       "fast_api::CType::",
     )
-  }
-    }
-  }
+  },
+      fast_${name}_ as *const _
+  );
 
   fn fast_${name}_(
     _: v8::Local<v8::Object>,
     ${parameters.map((p, i) => `p${i}: ${fastParameterValue(p)}`).join(", ")}
-  ) -> ${result} {
-    r#impl::${name}(${parameters.map(fastValues).join(", ")}) as _
+  ) -> ${fastParameterValue(result)} {
+    unsafe { r#impl::${name}(${parameters.map(fastValues).join(", ")}) as _ }
   }
 
   fn slow_${name}_(
@@ -172,9 +188,9 @@ export function generateBinding(
     mut rv: v8::ReturnValue,
   ) {
 ${parameters.map(serdeV8Decl).join("\n")}
-    let result = r#impl::${name}(${
+    let result = unsafe { r#impl::${name}(${
     parameters.map((_, i) => `p${i}`).join(", ")
-  });
-    rv.set(v8::Number::new(scope, result as _).into());
+  }) };
+    rv.set(${toV8(result)});
   }\n`;
 }

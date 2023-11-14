@@ -70,7 +70,7 @@ cfg_v8! {
       let scope = &mut v8::ContextScope::new(scope, context);
       let source_str = v8::String::new(scope, source).unwrap();
 
-      let name_str = v8::String::new(scope, "<eval>").unwrap();
+      let name_str = v8::String::new(scope, "main.ts").unwrap();
       let origin = module_origin(scope, name_str);
 
       let source = v8::script_compiler::Source::new(source_str, Some(&origin));
@@ -91,6 +91,12 @@ cfg_v8! {
       let module = module.unwrap();
       module.instantiate_module(try_catch, module_resolve_callback).unwrap();
       module.evaluate(try_catch).unwrap();
+
+      if module.get_status() == v8::ModuleStatus::Errored {
+        let exception = module.get_exception().to_rust_string_lossy(try_catch);
+
+        panic!("{}", exception);
+      }
     }
   }
 }

@@ -44,7 +44,13 @@ export type Definition = {
 };
 
 type NativeType = "i32" | "i64" | "f32" | "f64" | "u32" | "u64" | "bool";
-type NativeTypeSequence = "*u8" | "*u32" | "*char";
+type NativeTypeSequence =
+  | "*u8"
+  | "*u32"
+  | "*char"
+  | "pointer"
+  | "string"
+  | "buffer";
 
 export type Parameter = NativeType | NativeTypeSequence;
 export type Result = Exclude<NativeType, "i64" | "u64" | "f64"> | "void";

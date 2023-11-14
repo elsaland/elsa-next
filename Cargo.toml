@@ -21,7 +21,7 @@ path = "main.rs"
 
 [dependencies]
 # engines
-v8 = { version = "0.58.0", optional = true }
+v8 = { version = "0.81.0", optional = true }
 rusty_jsc_sys = { version = "0.0.3", optional = true }
 mozjs = { git = "https://github.com/servo/mozjs", rev = "0623d5fced66007ec7a35d1ca9a3cfd1b30f27f9", optional = true }
 libquickjs-sys = { version = "0.10.0", optional = true }
@@ -42,6 +42,8 @@ stc_ts_lang_server = { git = "https://github.com/dudykr/stc.git", rev = "23dd114
 stc_ts_module_loader = { git = "https://github.com/dudykr/stc.git" , rev = "23dd114529f10c5d645887c055cd396d1bfe7b11", optional = true }
 stc_ts_type_checker = { git = "https://github.com/dudykr/stc.git", rev = "23dd114529f10c5d645887c055cd396d1bfe7b11", optional = true }
 swc_ecma_ast = { version = "0.94.20", optional = true }
+
+libc = "0.2.150"
 
 [profile.release]
 lto = true

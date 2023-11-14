@@ -69,13 +69,30 @@ export class JscGenerator implements Generator {
 const todo = 'compile_error!("TODO: implement")';
 function parameterValues(ty: string, i: number) {
   if (ty === "buffer") {
-    return todo;
+    return `let p${i} = JSObjectGetTypedArrayBytesPtr(ctx, *(arguments.offset(${i} as _) as *mut _), exception)`;
   }
   if (ty === "pointer") {
-    return "u64";
+    return `let p${i} = if JSValueIsObject(ctx, *(arguments.offset(${i}) as *mut _)) {
+      JSObjectGetTypedArrayBytesPtr(ctx, *(arguments.offset(${i}) as *mut _), exception) as *mut ()
+    } else {
+      JSValueToNumber(ctx, *(arguments.offset(${i}) as *mut _), exception) as u64 as *mut ()
+    };`;
+  }
+  if (ty == "string") {
+    return `let tmp_${i} = {
+      let string = JSValueToStringCopy(ctx, *(arguments.offset(${i}) as *mut _), exception);
+      let size = JSStringGetMaximumUTF8CStringSize(string);
+      let mut buffer = vec![0u8; size as _];
+
+      let size = JSStringGetUTF8CString(string, buffer.as_mut_ptr() as _, size as _);
+      buffer.set_len(size as _);
+      String::from_utf8_unchecked(buffer)
+    };
+
+    let p${i} = tmp_${i}.as_ref();`;
   }
   // skip scalar type validation, compiler will catch it
-  return `JSValueToNumber(ctx, *(arguments.offset(${i} as _)), exception)`;
+  return `let p${i} = JSValueToNumber(ctx, *(arguments.offset(${i} as _)), exception)`;
 }
 
 function makeReturn(type: string): string {
@@ -102,9 +119,9 @@ export function generateBinding(
     arguments: *const JSValueRef,
     exception: *mut JSValueRef,
 ) -> JSValueRef {
-  assert!(argument_count == ${parameters.length});
+  // assert!(argument_count <= ${parameters.length}, "${name} expects atleast ${parameters.length} arguments");
 ${
-    parameters.map((p, i) => `  let p${i} = ${parameterValues(p, i)};`).join(
+    parameters.map((p, i) => `  ${parameterValues(p, i)};`).join(
       ";\n",
     )
   }

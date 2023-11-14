@@ -61,7 +61,7 @@ async function release() {
       maybeFlags.join(",")
     }`;
   } else {
-    await $`./build/main.ts && cargo fmt && cargo build`;
+    await $`./build/main.ts && cargo fmt && cargo build --release`;
   }
 }
 

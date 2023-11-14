@@ -15,6 +15,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+pub use libc::*;
+
 pub fn add(a: u32, b: u32) -> u32 {
   a + b
+}
+
+pub fn print(msg: &str) {
+  println!("{}", msg);
 }
