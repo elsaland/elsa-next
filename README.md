@@ -1,11 +1,11 @@
-## Elsa
+## `elsa-next`
 
-Small, baseline performant JavaScript runtime. If you want to answer, _how fast
-can JavaScript runtimes go?_. This is the place.
+Small, baseline performant JavaScript runtime.
 
-We use Elsa for benchmarking Deno internally.
+If you want to answer, _how fast
+can JavaScript runtimes go?_ This is the place.
 
-Elsa is engine-agnostic. It has engine backends for:
+Elsa is "engine-agnostic". It has engine backends for:
 
 - V8
 - JavaScriptCore
@@ -15,18 +15,17 @@ Elsa is engine-agnostic. It has engine backends for:
 TypeScript stripping support available behind `typescript` feature flag using
 `swc`. Typechecking done using `stc`.
 
-## Why was this revived?
+## Why?
 
-When it first started out, Elsa was a fun project. I eventually moved on to work
-on Deno.
+When it first started out, Elsa was a fun project written in Go. 
 
-We were using just-js/spindle/crimson for baseline perf comparison. I wanted to
+I was using just-js/spindle/crimson for baseline perf comparison when working on Deno. I wanted to
 benchmark against many many possibilities. Elsa is an attempt to write a
 cross-platform engine-agnostic fast JavaScript runtime.
 
 Elsa is designed for:
 
-- Speed. TODO microbenchmarks.
+- Speed.
 - Size. Smallest configuration is 0.3MB.
 - Tons of compile time feature flags. Don't include things in the binary you
   don't need!
@@ -36,10 +35,11 @@ Elsa is designed for:
 
   `cargo build --no-default-features --features "use_v8,fs,typescript"`
 
-- Easy to embed. Offers a Rust crate and C API (with Go and Zig bindings).
+- Easy to embed. Offers a Rust crate and C API (TODO).
 
-In time, most Elsa speed optimizations will make it to Deno.
+Elsa is a hobby project. It does not intend to compete with major runtime.
 
+<!--
 ## Why not use spindle?
 
 It only works on Linux. Unfortunately, making it work on macOS / windows is
@@ -61,6 +61,7 @@ Key difference from crimson:
 
 - No common state
 - Not rust futures executor
+-->
 
 ## Building
 
@@ -118,14 +119,12 @@ With typescript support:
 
 ## Guidelines for contributors
 
+Feel free to reach out if you are interested in contributing.
+
 - No serde. It's a performance killer. Serializing objects is discouraged. If
   you need to pass untyped complex data, use the engine's `Value` type.
 - Typed data must always have inlined conversions using codegen in place.
 - Everything should be behind a compile time feature flag.
-
-## Authors
-
-[littledivy](http://github.com/littledivy) - Divy Srivastava
 
 ## License
 
