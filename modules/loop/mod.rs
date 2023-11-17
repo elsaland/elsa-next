@@ -663,15 +663,18 @@ crate::cfg_quickjs!(
     }
   }
   unsafe extern "C" fn print_(
-    _ctx: *mut q::JSContext,
+    ctx: *mut q::JSContext,
     _this: q::JSValue,
     argc: i32,
     argv: *mut q::JSValue,
     _magic: i32,
     data: *mut q::JSValue,
   ) -> q::JSValue {
-    assert!(argc == 1);
-    let p0 = (*(argv.offset(0 as _))).u.int32;
+    // assert!(argc == 1, "in print");
+    let p0 =
+      std::ffi::CStr::from_ptr(q::JS_ToCString(ctx, *(argv.offset(0 as _))))
+        .to_str()
+        .unwrap();
     let result = r#impl::print(p0 as _);
     q::JSValue {
       u: q::JSValueUnion { int32: 0 },
@@ -679,14 +682,14 @@ crate::cfg_quickjs!(
     }
   }
   unsafe extern "C" fn kqueue_(
-    _ctx: *mut q::JSContext,
+    ctx: *mut q::JSContext,
     _this: q::JSValue,
     argc: i32,
     argv: *mut q::JSValue,
     _magic: i32,
     data: *mut q::JSValue,
   ) -> q::JSValue {
-    assert!(argc == 0);
+    // assert!(argc == 0, "in kqueue");
 
     let result = r#impl::kqueue();
     q::JSValue {
@@ -695,20 +698,47 @@ crate::cfg_quickjs!(
     }
   }
   unsafe extern "C" fn kevent_(
-    _ctx: *mut q::JSContext,
+    ctx: *mut q::JSContext,
     _this: q::JSValue,
     argc: i32,
     argv: *mut q::JSValue,
     _magic: i32,
     data: *mut q::JSValue,
   ) -> q::JSValue {
-    assert!(argc == 6);
+    // assert!(argc == 6, "in kevent");
     let p0 = (*(argv.offset(0 as _))).u.int32;
-    let p1 = compile_error!("TODO: implement");
+    let p1 = {
+      if q::JS_IsObject(*(argv.offset(1 as _))) != 0 {
+        let mut len = 0;
+        let val = *(argv.offset(1 as _));
+        q::JS_GetUint8Array(ctx, &mut len, val)
+      } else {
+        // Get number
+        (*(argv.offset(1 as _))).u.float64 as u64 as *mut u8
+      }
+    };
     let p2 = (*(argv.offset(2 as _))).u.int32;
-    let p3 = compile_error!("TODO: implement");
+    let p3 = {
+      if q::JS_IsObject(*(argv.offset(3 as _))) != 0 {
+        let mut len = 0;
+        let val = *(argv.offset(3 as _));
+        q::JS_GetUint8Array(ctx, &mut len, val)
+      } else {
+        // Get number
+        (*(argv.offset(3 as _))).u.float64 as u64 as *mut u8
+      }
+    };
     let p4 = (*(argv.offset(4 as _))).u.int32;
-    let p5 = compile_error!("TODO: implement");
+    let p5 = {
+      if q::JS_IsObject(*(argv.offset(5 as _))) != 0 {
+        let mut len = 0;
+        let val = *(argv.offset(5 as _));
+        q::JS_GetUint8Array(ctx, &mut len, val)
+      } else {
+        // Get number
+        (*(argv.offset(5 as _))).u.float64 as u64 as *mut u8
+      }
+    };
     let result =
       r#impl::kevent(p0 as _, p1 as _, p2 as _, p3 as _, p4 as _, p5 as _);
     q::JSValue {
@@ -717,14 +747,14 @@ crate::cfg_quickjs!(
     }
   }
   unsafe extern "C" fn socket_(
-    _ctx: *mut q::JSContext,
+    ctx: *mut q::JSContext,
     _this: q::JSValue,
     argc: i32,
     argv: *mut q::JSValue,
     _magic: i32,
     data: *mut q::JSValue,
   ) -> q::JSValue {
-    assert!(argc == 3);
+    // assert!(argc == 3, "in socket");
     let p0 = (*(argv.offset(0 as _))).u.int32;
     let p1 = (*(argv.offset(1 as _))).u.int32;
     let p2 = (*(argv.offset(2 as _))).u.int32;
@@ -735,18 +765,27 @@ crate::cfg_quickjs!(
     }
   }
   unsafe extern "C" fn setsockopt_(
-    _ctx: *mut q::JSContext,
+    ctx: *mut q::JSContext,
     _this: q::JSValue,
     argc: i32,
     argv: *mut q::JSValue,
     _magic: i32,
     data: *mut q::JSValue,
   ) -> q::JSValue {
-    assert!(argc == 5);
+    // assert!(argc == 5, "in setsockopt");
     let p0 = (*(argv.offset(0 as _))).u.int32;
     let p1 = (*(argv.offset(1 as _))).u.int32;
     let p2 = (*(argv.offset(2 as _))).u.int32;
-    let p3 = compile_error!("TODO: implement");
+    let p3 = {
+      if q::JS_IsObject(*(argv.offset(3 as _))) != 0 {
+        let mut len = 0;
+        let val = *(argv.offset(3 as _));
+        q::JS_GetUint8Array(ctx, &mut len, val)
+      } else {
+        // Get number
+        (*(argv.offset(3 as _))).u.float64 as u64 as *mut u8
+      }
+    };
     let p4 = (*(argv.offset(4 as _))).u.int32;
     let result =
       r#impl::setsockopt(p0 as _, p1 as _, p2 as _, p3 as _, p4 as _);
@@ -756,16 +795,25 @@ crate::cfg_quickjs!(
     }
   }
   unsafe extern "C" fn bind_(
-    _ctx: *mut q::JSContext,
+    ctx: *mut q::JSContext,
     _this: q::JSValue,
     argc: i32,
     argv: *mut q::JSValue,
     _magic: i32,
     data: *mut q::JSValue,
   ) -> q::JSValue {
-    assert!(argc == 3);
+    // assert!(argc == 3, "in bind");
     let p0 = (*(argv.offset(0 as _))).u.int32;
-    let p1 = compile_error!("TODO: implement");
+    let p1 = {
+      if q::JS_IsObject(*(argv.offset(1 as _))) != 0 {
+        let mut len = 0;
+        let val = *(argv.offset(1 as _));
+        q::JS_GetUint8Array(ctx, &mut len, val)
+      } else {
+        // Get number
+        (*(argv.offset(1 as _))).u.float64 as u64 as *mut u8
+      }
+    };
     let p2 = (*(argv.offset(2 as _))).u.int32;
     let result = r#impl::bind(p0 as _, p1 as _, p2 as _);
     q::JSValue {
@@ -774,14 +822,14 @@ crate::cfg_quickjs!(
     }
   }
   unsafe extern "C" fn listen_(
-    _ctx: *mut q::JSContext,
+    ctx: *mut q::JSContext,
     _this: q::JSValue,
     argc: i32,
     argv: *mut q::JSValue,
     _magic: i32,
     data: *mut q::JSValue,
   ) -> q::JSValue {
-    assert!(argc == 2);
+    // assert!(argc == 2, "in listen");
     let p0 = (*(argv.offset(0 as _))).u.int32;
     let p1 = (*(argv.offset(1 as _))).u.int32;
     let result = r#impl::listen(p0 as _, p1 as _);
@@ -791,14 +839,14 @@ crate::cfg_quickjs!(
     }
   }
   unsafe extern "C" fn close_(
-    _ctx: *mut q::JSContext,
+    ctx: *mut q::JSContext,
     _this: q::JSValue,
     argc: i32,
     argv: *mut q::JSValue,
     _magic: i32,
     data: *mut q::JSValue,
   ) -> q::JSValue {
-    assert!(argc == 1);
+    // assert!(argc == 1, "in close");
     let p0 = (*(argv.offset(0 as _))).u.int32;
     let result = r#impl::close(p0 as _);
     q::JSValue {
@@ -807,17 +855,35 @@ crate::cfg_quickjs!(
     }
   }
   unsafe extern "C" fn accept_(
-    _ctx: *mut q::JSContext,
+    ctx: *mut q::JSContext,
     _this: q::JSValue,
     argc: i32,
     argv: *mut q::JSValue,
     _magic: i32,
     data: *mut q::JSValue,
   ) -> q::JSValue {
-    assert!(argc == 3);
+    // assert!(argc == 3, "in accept");
     let p0 = (*(argv.offset(0 as _))).u.int32;
-    let p1 = compile_error!("TODO: implement");
-    let p2 = compile_error!("TODO: implement");
+    let p1 = {
+      if q::JS_IsObject(*(argv.offset(1 as _))) != 0 {
+        let mut len = 0;
+        let val = *(argv.offset(1 as _));
+        q::JS_GetUint8Array(ctx, &mut len, val)
+      } else {
+        // Get number
+        (*(argv.offset(1 as _))).u.float64 as u64 as *mut u8
+      }
+    };
+    let p2 = {
+      if q::JS_IsObject(*(argv.offset(2 as _))) != 0 {
+        let mut len = 0;
+        let val = *(argv.offset(2 as _));
+        q::JS_GetUint8Array(ctx, &mut len, val)
+      } else {
+        // Get number
+        (*(argv.offset(2 as _))).u.float64 as u64 as *mut u8
+      }
+    };
     let result = r#impl::accept(p0 as _, p1 as _, p2 as _);
     q::JSValue {
       u: q::JSValueUnion { int32: result as _ },
@@ -825,16 +891,19 @@ crate::cfg_quickjs!(
     }
   }
   unsafe extern "C" fn send_(
-    _ctx: *mut q::JSContext,
+    ctx: *mut q::JSContext,
     _this: q::JSValue,
     argc: i32,
     argv: *mut q::JSValue,
     _magic: i32,
     data: *mut q::JSValue,
   ) -> q::JSValue {
-    assert!(argc == 4);
+    // assert!(argc == 4, "in send");
     let p0 = (*(argv.offset(0 as _))).u.int32;
-    let p1 = compile_error!("TODO: implement");
+    let p1 = {
+      let mut len = 0;
+      q::JS_GetUint8Array(ctx, &mut len, *(argv.offset(1 as _)))
+    };
     let p2 = (*(argv.offset(2 as _))).u.int32;
     let p3 = (*(argv.offset(3 as _))).u.int32;
     let result = r#impl::send(p0 as _, p1 as _, p2 as _, p3 as _);
@@ -844,16 +913,19 @@ crate::cfg_quickjs!(
     }
   }
   unsafe extern "C" fn recv_(
-    _ctx: *mut q::JSContext,
+    ctx: *mut q::JSContext,
     _this: q::JSValue,
     argc: i32,
     argv: *mut q::JSValue,
     _magic: i32,
     data: *mut q::JSValue,
   ) -> q::JSValue {
-    assert!(argc == 4);
+    // assert!(argc == 4, "in recv");
     let p0 = (*(argv.offset(0 as _))).u.int32;
-    let p1 = compile_error!("TODO: implement");
+    let p1 = {
+      let mut len = 0;
+      q::JS_GetUint8Array(ctx, &mut len, *(argv.offset(1 as _)))
+    };
     let p2 = (*(argv.offset(2 as _))).u.int32;
     let p3 = (*(argv.offset(3 as _))).u.int32;
     let result = r#impl::recv(p0 as _, p1 as _, p2 as _, p3 as _);

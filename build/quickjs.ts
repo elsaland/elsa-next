@@ -66,15 +66,30 @@ export class QuickJsGenerator implements Generator {
   }
 }
 
-const todo = 'compile_error!("TODO: implement")';
+const todo = 'compile_error!("TODO: implement");';
 function parameterValues(ty: string, i: number) {
   if (ty === "buffer") {
-    return todo;
+    return `let p${i} = {
+      let mut len = 0;
+      q::JS_GetUint8Array(ctx, &mut len, *(argv.offset(${i} as _)))
+    };`;
   }
   if (ty === "pointer") {
-    return todo;
+    return `let p${i} = {
+      if q::JS_IsObject(*(argv.offset(${i} as _))) != 0 {
+        let mut len = 0;
+        let val = *(argv.offset(${i} as _));
+        q::JS_GetUint8Array(ctx, &mut len, val)
+      } else {
+        // Get number
+        (*(argv.offset(${i} as _))).u.float64 as u64 as *mut u8
+      }
+    };`;
   }
-  return `(*(argv.offset(${i} as _))).u.int32`;
+  if (ty == "string") {
+    return `let p${i} = std::ffi::CStr::from_ptr(q::JS_ToCString(ctx, *(argv.offset(${i} as _)))).to_str().unwrap();`;
+  }
+  return `let p${i} = (*(argv.offset(${i} as _))).u.int32;`;
 }
 
 function makeReturn(type: string): string {
@@ -94,17 +109,17 @@ export function generateBinding(
   { name, parameters = [], result = "void" }: Definition,
 ): string {
   return `unsafe extern "C" fn ${name}_(
-    _ctx: *mut q::JSContext,
+    ctx: *mut q::JSContext,
     _this: q::JSValue,
     argc: i32,
     argv: *mut q::JSValue,
     _magic: i32,
     data: *mut q::JSValue,
 ) -> q::JSValue {
-  assert!(argc == ${parameters.length});
+  // assert!(argc == ${parameters.length}, "in ${name}");
   ${
-    parameters.map((p, i) => `  let p${i} = ${parameterValues(p, i)};`).join(
-      ";\n",
+    parameters.map((p, i) => `${parameterValues(p, i)}`).join(
+      "\n",
     )
   }
   let result = r#impl::${name}(${

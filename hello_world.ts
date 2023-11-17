@@ -104,7 +104,6 @@ function connect(addr, port) {
   rc = bind(sfd, struct_sockaddr_in(addr, port), 16);
 
   rc = listen(sfd, backlog);
-
   register(sfd, (event) => {
     if (event & EPOLLERR || event & EPOLLHUP) {
       // ...
