@@ -207,7 +207,7 @@ cfg_mozjs! {
 }
 
 cfg_quickjs! {
-  use libquickjs_sys as q;
+  use quickjs_ng_sys as q;
   use std::ffi::CString;
 
   pub struct Runtime {
@@ -224,15 +224,21 @@ cfg_quickjs! {
     }
   }
 
-  impl Runtime {
-    pub fn new() -> Self {
+  impl AbstractRuntime for Runtime {
+    type Value<'s> = q::JSValue;
+    type Context<'s> = q::JSContext;
+
+    fn init() -> Self {
       let runtime = unsafe { q::JS_NewRuntime() };
       let context = unsafe { q::JS_NewContext(runtime) };
-      modules::setup_bindings(context);
       Self { context, runtime }
     }
 
-    pub fn eval(&mut self, source: &str) {
+    fn setup_bindings<'s>(&mut self) {
+      modules::setup_bindings(self.context);
+    }
+
+    fn eval(&mut self, source: &str) {
       let code = CString::new(source).unwrap();
       let filename = CString::new("<eval>").unwrap();
       let value_raw = unsafe {

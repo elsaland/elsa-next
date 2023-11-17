@@ -22,7 +22,7 @@ export class QuickJsGenerator implements Generator {
   modulePrelude(): string {
     return `
   pub fn setup_bindings(
-    context: *mut libquickjs_sys::JSContext,
+    context: *mut quickjs_ng_sys::JSContext,
   ) {\n`;
   }
 
@@ -36,7 +36,7 @@ export class QuickJsGenerator implements Generator {
 
   symbolsPrelude(imports: string[]): string {
     return `  mod r#impl;
-  use libquickjs_sys as q;
+  use quickjs_ng_sys as q;
   ${imports.map((i) => `mod ${i};`).join("\n")}
   pub fn init(
     context: *mut q::JSContext,

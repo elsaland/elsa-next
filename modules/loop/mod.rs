@@ -563,7 +563,7 @@ crate::cfg_v8!(
 
 crate::cfg_quickjs!(
   mod r#impl;
-  use libquickjs_sys as q;
+  use quickjs_ng_sys as q;
 
   pub fn init(context: *mut q::JSContext) {
     let global_raw = unsafe { q::JS_GetGlobalObject(context) };
