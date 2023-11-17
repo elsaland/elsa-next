@@ -1,9 +1,38 @@
 use crate::modules;
 
+pub trait AbstractRuntime {
+  type Value<'s>;
+  type Context<'s>;
+
+  fn init() -> Self;
+  fn setup_bindings<'s>(&mut self);
+  fn eval(&mut self, source: &str);
+}
+
 cfg_v8! {
   pub struct Runtime {
     isolate: v8::OwnedIsolate,
     // module_map: Rc<RefCell<ModuleMap>>,
+  }
+
+  impl AbstractRuntime for Runtime {
+    type Value<'s> = v8::Local<'s, v8::Value>;
+    type Context<'s> = v8::HandleScope<'s, ()>;
+
+    fn init() -> Self {
+      setup();
+      let isolate = v8::Isolate::new(Default::default());
+      Self { isolate }
+    }
+
+    fn setup_bindings<'s>(&mut self) {
+      let scope = &mut v8::HandleScope::new(&mut self.isolate);
+      modules::setup_bindings(scope);
+    }
+
+    fn eval(&mut self, source: &str) {
+      self.eval(source)
+    }
   }
 
   fn setup() {
@@ -55,12 +84,6 @@ cfg_v8! {
   }
 
   impl Runtime {
-    pub fn new() -> Self {
-      setup();
-      let isolate = v8::Isolate::new(Default::default());
-      Self { isolate }
-    }
-
     pub fn eval(&mut self, source: &str) {
       let scope = &mut v8::HandleScope::new(&mut self.isolate);
 
@@ -110,26 +133,23 @@ cfg_jsc! {
     context: JSContextRef,
   }
 
-  impl Drop for Runtime {
-    fn drop(&mut self) {
-      unsafe {
-        JSGlobalContextRelease(self.context as _);
-        JSContextGroupRelease(self.vm);
-      }
-    }
-  }
+  impl AbstractRuntime for Runtime {
+    type Value<'s> = JSValueRef;
+    type Context<'s> = JSContextRef;
 
-  impl Runtime {
-    pub fn new() -> Self {
+    fn init() -> Self {
       let vm = unsafe { JSContextGroupCreate() };
       let context =
           unsafe { JSGlobalContextCreateInGroup(vm, std::ptr::null_mut()) };
 
-      modules::setup_bindings(context);
       Self { context, vm }
     }
 
-    pub fn eval(&mut self, source: &str) {
+    fn setup_bindings<'s>(&mut self) {
+      modules::setup_bindings(self.context);
+    }
+
+    fn eval(&mut self, source: &str) {
       let source = CString::new(source.as_bytes()).unwrap();
       let source = unsafe { JSStringCreateWithUTF8CString(source.as_ptr()) };
 
@@ -149,6 +169,15 @@ cfg_jsc! {
 
       if unsafe { JSValueIsNull(self.context, value) } {
         panic!("JS exception: {:?}", exception)
+      }
+    }
+  }
+
+  impl Drop for Runtime {
+    fn drop(&mut self) {
+      unsafe {
+        JSGlobalContextRelease(self.context as _);
+        JSContextGroupRelease(self.vm);
       }
     }
   }

@@ -17,10 +17,6 @@
 
 pub use libc::*;
 
-pub fn add(a: u32, b: u32) -> u32 {
-  a + b
-}
-
 pub fn print(msg: &str) {
   println!("{}", msg);
 }

@@ -13,13 +13,6 @@ crate::cfg_v8!(
     global: v8::Local<'s, v8::ObjectTemplate>,
   ) {
     global.set(
-      v8::String::new(scope, "add").unwrap().into(),
-      v8::FunctionTemplate::builder_raw(slow_add_.map_fn_to())
-        .build_fast(scope, &FAST_add, None, None, None)
-        // .build(scope)
-        .into(),
-    );
-    global.set(
       v8::String::new(scope, "print").unwrap().into(),
       v8::FunctionTemplate::builder_raw(slow_print_.map_fn_to())
         .build_fast(scope, &FAST_print, None, None, None)
@@ -96,32 +89,6 @@ crate::cfg_v8!(
         // .build(scope)
         .into(),
     );
-  }
-
-  pub struct add_;
-  const FAST_add: fast_api::FastFunction = fast_api::FastFunction::new(
-    &[
-      fast_api::Type::V8Value,
-      fast_api::Type::Int32,
-      fast_api::Type::Int32,
-    ],
-    fast_api::CType::Int32,
-    fast_add_ as *const _,
-  );
-
-  fn fast_add_(_: v8::Local<v8::Object>, p0: i32, p1: i32) -> i32 {
-    unsafe { r#impl::add(p0 as _, p1 as _) as _ }
-  }
-
-  fn slow_add_(
-    scope: &mut v8::HandleScope,
-    args: v8::FunctionCallbackArguments,
-    mut rv: v8::ReturnValue,
-  ) {
-    let p0 = args.get(0).uint32_value(scope).unwrap() as _;
-    let p1 = args.get(1).uint32_value(scope).unwrap() as _;
-    let result = unsafe { r#impl::add(p0, p1) };
-    rv.set(v8::Number::new(scope, result as _).into());
   }
 
   pub struct print_;
@@ -606,14 +573,6 @@ crate::cfg_quickjs!(
     }));
 
     let f =
-      unsafe { q::JS_NewCFunctionData(context, Some(add_), 2, 0, 1, data) };
-    if unsafe {
-      q::JS_SetPropertyStr(context, global_raw, "add ".as_ptr() as _, f)
-    } < 0
-    {
-      panic!("failed to set property")
-    }
-    let f =
       unsafe { q::JS_NewCFunctionData(context, Some(print_), 1, 0, 1, data) };
     if unsafe {
       q::JS_SetPropertyStr(context, global_raw, "print ".as_ptr() as _, f)
@@ -701,23 +660,6 @@ crate::cfg_quickjs!(
     } < 0
     {
       panic!("failed to set property")
-    }
-  }
-  unsafe extern "C" fn add_(
-    _ctx: *mut q::JSContext,
-    _this: q::JSValue,
-    argc: i32,
-    argv: *mut q::JSValue,
-    _magic: i32,
-    data: *mut q::JSValue,
-  ) -> q::JSValue {
-    assert!(argc == 2);
-    let p0 = (*(argv.offset(0 as _))).u.int32;
-    let p1 = (*(argv.offset(1 as _))).u.int32;
-    let result = r#impl::add(p0 as _, p1 as _);
-    q::JSValue {
-      u: q::JSValueUnion { int32: result as _ },
-      tag: q::JS_TAG_INT as _,
     }
   }
   unsafe extern "C" fn print_(
@@ -931,17 +873,6 @@ crate::cfg_jsc!(
       JSObjectMakeFunctionWithCallback(
         context,
         std::ptr::null_mut() as _,
-        Some(add_),
-      )
-    };
-    let name = unsafe { JSStringCreateWithUTF8CString("add ".as_ptr() as _) };
-    let mut exception: JSValueRef = std::ptr::null_mut();
-    unsafe { JSObjectSetProperty(context, obj, name, func, 0, &mut exception) }
-
-    let func = unsafe {
-      JSObjectMakeFunctionWithCallback(
-        context,
-        std::ptr::null_mut() as _,
         Some(print_),
       )
     };
@@ -1064,20 +995,6 @@ crate::cfg_jsc!(
     let name = unsafe { JSStringCreateWithUTF8CString("recv ".as_ptr() as _) };
     let mut exception: JSValueRef = std::ptr::null_mut();
     unsafe { JSObjectSetProperty(context, obj, name, func, 0, &mut exception) }
-  }
-  unsafe extern "C" fn add_(
-    ctx: JSContextRef,
-    _function: JSObjectRef,
-    _this_object: JSObjectRef,
-    argument_count: size_t,
-    arguments: *const JSValueRef,
-    exception: *mut JSValueRef,
-  ) -> JSValueRef {
-    // assert!(argument_count <= 2, "add expects atleast 2 arguments");
-    let p0 = JSValueToNumber(ctx, *(arguments.offset(0 as _)), exception);
-    let p1 = JSValueToNumber(ctx, *(arguments.offset(1 as _)), exception);
-    let result = r#impl::add(p0 as _, p1 as _);
-    JSValueMakeNumber(ctx, result as _)
   }
   unsafe extern "C" fn print_(
     ctx: JSContextRef,

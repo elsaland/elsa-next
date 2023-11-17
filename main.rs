@@ -25,10 +25,12 @@ mod runtime;
 #[cfg(feature = "typescript")]
 mod strip;
 
+use crate::runtime::AbstractRuntime;
+
 fn main() {
   let filename = std::env::args()
     .nth(1)
-    .expect("Invalid invocation. Usage: crimson <filename>");
+    .expect("Invalid invocation. Usage: elsa <filename>");
 
   #[cfg(feature = "typecheck")]
   let j = {
@@ -46,5 +48,7 @@ fn main() {
   #[cfg(feature = "typecheck")]
   j.join().unwrap();
 
-  runtime::Runtime::new().eval(&source);
+  let mut rt = runtime::Runtime::init();
+  rt.setup_bindings();
+  rt.eval(&source);
 }
