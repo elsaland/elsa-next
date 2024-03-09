@@ -23,57 +23,57 @@ const symbols: Definition[] = [
     parameters: ["string"],
     result: "void",
   },
-  // kqueue
-  {
-    name: "kqueue",
-    parameters: [],
-    result: "i32",
-  },
-  {
-    name: "kevent",
-    "parameters": ["i32", "pointer", "i32", "pointer", "i32", "pointer"],
-    "result": "i32",
-  },
-  {
-    name: "socket",
-    "parameters": ["i32", "i32", "i32"],
-    "result": "i32",
-  },
-  {
-    name: "setsockopt",
-    "parameters": ["i32", "i32", "i32", "pointer", "i32"],
-    "result": "i32",
-  },
-  {
-    name: "bind",
-    "parameters": ["i32", "pointer", "i32"],
-    "result": "i32",
-  },
-  {
-    name: "listen",
-    "parameters": ["i32", "i32"],
-    "result": "i32",
-  },
-  {
-    name: "close",
-    "parameters": ["i32"],
-    "result": "i32",
-  },
-  {
-    name: "accept",
-    "parameters": ["i32", "pointer", "pointer"],
-    "result": "i32",
-  },
-  {
-    name: "send",
-    "parameters": ["i32", "buffer", "i32", "i32"],
-    "result": "i32",
-  },
-  {
-    name: "recv",
-    "parameters": ["i32", "buffer", "i32", "i32"],
-    "result": "i32",
-  },
+  // // kqueue
+  // {
+  //   name: "kqueue",
+  //   parameters: [],
+  //   result: "i32",
+  // },
+  // {
+  //   name: "kevent",
+  //   "parameters": ["i32", "pointer", "i32", "pointer", "i32", "pointer"],
+  //   "result": "i32",
+  // },
+  // {
+  //   name: "socket",
+  //   "parameters": ["i32", "i32", "i32"],
+  //   "result": "i32",
+  // },
+  // {
+  //   name: "setsockopt",
+  //   "parameters": ["i32", "i32", "i32", "pointer", "i32"],
+  //   "result": "i32",
+  // },
+  // {
+  //   name: "bind",
+  //   "parameters": ["i32", "pointer", "i32"],
+  //   "result": "i32",
+  // },
+  // {
+  //   name: "listen",
+  //   "parameters": ["i32", "i32"],
+  //   "result": "i32",
+  // },
+  // {
+  //   name: "close",
+  //   "parameters": ["i32"],
+  //   "result": "i32",
+  // },
+  // {
+  //   name: "accept",
+  //   "parameters": ["i32", "pointer", "pointer"],
+  //   "result": "i32",
+  // },
+  // {
+  //   name: "send",
+  //   "parameters": ["i32", "buffer", "i32", "i32"],
+  //   "result": "i32",
+  // },
+  // {
+  //   name: "recv",
+  //   "parameters": ["i32", "buffer", "i32", "i32"],
+  //   "result": "i32",
+  // },
 ];
 
 export default {

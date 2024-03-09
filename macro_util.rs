@@ -58,3 +58,14 @@ macro_rules! cfg_quickjs {
       )*
   }
 }
+
+#[macro_export]
+macro_rules! cfg_hermes {
+  ($($item:item)*) => {
+      $(
+          #[cfg(feature = "use_hermes")]
+          #[cfg_attr(docsrs, doc(cfg(feature = "use_hermes")))]
+          $item
+      )*
+  }
+}

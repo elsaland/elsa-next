@@ -254,3 +254,31 @@ cfg_quickjs! {
     }
   }
 }
+
+cfg_hermes! {
+  use libhermesabi_sys::*;
+
+  pub struct Runtime {
+    runtime: *mut HermesABIRuntime
+  }
+
+  impl AbstractRuntime for Runtime {
+    type Value<'s> = ();
+    type Context<'s> = ();
+
+    fn init() -> Self {
+        unsafe {
+          let vtable = &*get_hermes_abi_vtable();
+
+          let config = std::ptr::null_mut();
+          let runtime = (vtable.make_hermes_runtime.unwrap())(config);
+            Self { runtime }
+        }
+    }
+
+    fn setup_bindings<'s>(&mut self) {
+    }
+
+    fn eval(&mut self, source: &str) {}
+  }
+}

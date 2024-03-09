@@ -11,6 +11,7 @@ Elsa is "engine-agnostic". It has engine backends for:
 - JavaScriptCore
 - SpiderMonkey
 - QuickJS
+- Hermes
 
 TypeScript stripping support available behind `typescript` feature flag using
 `swc`. Typechecking done using `stc`.

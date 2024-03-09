@@ -73,6 +73,10 @@ const features = [
     "",
     "Speed. You choose your engine, Elsa provides optimized bindings for your engine.",
   ],
+  [
+    "",
+    "Quick compilation. Elsa is designed to be compiled quickly, with minimal dependencies.",
+  ],
 ];
 
 function Home() {
@@ -82,44 +86,82 @@ function Home() {
     >
       <div class={tw`max-w-3xl mx-auto`}>
         <h1 class={tw`text-4xl font-bold`}>Elsa</h1>
-        <p class={tw`text-gray-500`}>
-          Elsa is a JavaScript runtime.
+        <p class={tw`text-gray-500 dark:text-gray-200`}>
+          Low level JavaScript runtime, close to the metal.
         </p>
 
-        <div
-          class={tw`mt-8`}
-        >
-          <Button
-            class={tw`text-white text-indigo-700 bg-indigo-100`}
-            style="backdrop-filter: blur(10px);"
-          >
-            Coming soon...
-          </Button>
-          {
-            /*
-          <Button
-            class={tw`text-white bg-gradient-to-r from-blue-400 to-blue-500`}
-            style="backdrop-filter: blur(10px);"
-          >
-            Get started
-          </Button>
-            /* <Button class={tw`ml-3 text-indigo-700 bg-indigo-100`}>
-            Learn more
-          </Button> */
-          }
+        <div class={tw`mt-8`}>
+          <img
+            src="https://v8.dev/_img/v8.svg"
+            alt="V8"
+            width="38"
+            height="38"
+            class={tw`inline-block`}
+          />
+          <img
+            src="https://docs.webkit.org/assets/WebKit.svg"
+            alt="JSC"
+            width="38"
+            height="38"
+            class={tw`inline-block ml-2`}
+          />
+          <img
+            src="https://raw.githubusercontent.com/facebook/hermes/main/website/static/img/logo.svg"
+            alt="Hermes"
+            width="38"
+            height="38"
+            class={tw`inline-block ml-2`}
+          />
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Spidermonkey-logo-2021.svg/120px-Spidermonkey-logo-2021.svg.png"
+            alt="SpiderMonkey"
+            width="38"
+            height="38"
+            class={tw`inline-block ml-2`}
+          />
+          <img
+            src="https://avatars.githubusercontent.com/u/149480552?s=200&v=4"
+            alt="QuickJS"
+            width="38"
+            height="38"
+            class={tw`inline-block ml-2`}
+          />
         </div>
 
         <GitHub class={tw`absolute top-0 right-0 mt-4 mr-4`} />
       </div>
 
+      <div class={tw`mt-8 max-w-3xl mx-auto`}>
+        <div
+          class={tw`bg-white overflow-hidden sm:rounded-lg border border-gray-200 dark:border-gray-800`}
+        >
+          <div class={tw`px-4 py-5 sm:px-6 pre`}>
+            <p class={tw`mt-1 max-w-2xl text-sm text-gray-500`}>
+              <code>
+                {`brew install elsa`}
+              </code>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
+        class={tw`mt-8 max-w-3xl mx-auto`}
+      >
+        <Button
+          class={tw`text-white text-indigo-700 bg-indigo-100`}
+          style="backdrop-filter: blur(10px);"
+        >
+          Coming soon...
+        </Button>
+      </div>
+
       {/* Features list */}
       <div class={tw`mt-8 max-w-3xl mx-auto`}>
-        <h2 class={tw`text-2xl font-bold`}>Features</h2>
         <ul class={tw`mt-4 space-y-4`}>
           {features.map(([title, description]) => (
             <li class={tw`flex`}>
               <IconGreenCheck />
-              <p class={tw`ml-3 text-base text-gray-500`}>
+              <p class={tw`ml-3 text-base text-gray-500 dark:text-gray-200`}>
                 {description}
               </p>
             </li>
@@ -127,36 +169,8 @@ function Home() {
         </ul>
       </div>
 
-      <div class={tw`mt-8 max-w-3xl mx-auto`}>
-        <div
-          class={tw`bg-white overflow-hidden sm:rounded-lg border border-gray-200`}
-        >
-          <div class={tw`px-4 py-5 sm:px-6`}>
-            <h3
-              class={tw`text-lg
-
-leading-6 font-medium text-gray-900`}
-            >
-              Preview
-            </h3>
-            {
-            /*
-            <p class={tw`mt-1 max-w-2xl text-sm text-gray-500`}>
-              Elsa is currently in private preview. Shoot me an{" "}
-              <a
-                href="mailto:dj.srivastava23@gmail.com"
-                class={tw`text-indigo-600`}
-              >
-                email
-              </a>{" "}
-              with your GitHub username to gain access.
-            </p>
-            */}
-          </div>
-        </div>
-      </div>
-
-      {/* Small build walkthrough */}
+      {
+        /* Small build walkthrough
       <script
         src="https://asciinema.org/a/545330.js"
         data-theme="asciinema"
@@ -165,7 +179,8 @@ leading-6 font-medium text-gray-900`}
         id="asciicast-545330"
         async
       >
-      </script>
+      </script> */
+      }
     </main>
   );
 }
@@ -177,7 +192,21 @@ const options = {
       @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
       h1 {
         font-family: 'Pacifico';
-      }`,
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #121212;
+          color: #ffffff;
+        }
+        .pre {
+          background-color: #292929;
+          color: #ffffff;
+        }
+        code {
+          color: #ffffff;
+        }
+      }
+      `,
 };
 
 function memoize<T>(fn: () => T): () => T {

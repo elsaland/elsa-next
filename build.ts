@@ -1,4 +1,4 @@
-#!/usr/bin/env deno run -A --unstable
+#!/usr/bin/env -S deno run -A --unstable
 
 // Copyright (c) 2022 Divy Srivastava.
 //
@@ -27,7 +27,7 @@ $.setPrintCommand(true);
 async function allRelease() {
   await $`./build/main.ts && cargo fmt`;
   const sizeData = [];
-  for (const feature of ["use_v8", "use_jsc", "use_quickjs"]) {
+  for (const feature of ["use_v8", "use_jsc", "use_quickjs", "use_hermes"]) {
     await $`cargo build --release --features ${feature},typescript --no-default-features`;
     sizeData.push({ feature: feature.slice(4), size: `${size()}MB` });
   }
@@ -48,7 +48,7 @@ async function debug() {
   if (maybeFlags.length > 0) {
     await $`./build/main.ts && cargo fmt && cargo build --no-default-features --features ${
       maybeFlags.join(",")
-    }`;
+    } -vv`;
   } else {
     await $`./build/main.ts && cargo fmt && cargo build`;
   }
@@ -59,7 +59,7 @@ async function release() {
   if (maybeFlags.length > 0) {
     await $`./build/main.ts && cargo fmt && cargo build --release --no-default-features --features ${
       maybeFlags.join(",")
-    }`;
+    } -vv`;
   } else {
     await $`./build/main.ts && cargo fmt && cargo build --release`;
   }

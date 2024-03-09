@@ -514,6 +514,7 @@ name = "elsa"
 version = "0.1.0"
 dependencies = [
  "libc",
+ "libhermesabi-sys",
  "mozjs",
  "quickjs-ng-sys",
  "rusty_jsc_sys",
@@ -1005,6 +1006,14 @@ name = "libc"
 version = "0.2.150"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "89d92a4743f9a61002fae18374ed11e7973f530cb3a3255fb354818118b2203c"
+
+[[package]]
+name = "libhermesabi-sys"
+version = "0.1.1"
+dependencies = [
+ "bindgen 0.65.1",
+ "cmake",
+]
 
 [[package]]
 name = "libloading"

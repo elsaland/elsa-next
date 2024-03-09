@@ -1,4 +1,4 @@
-#!/usr/bin/env deno run -A --unstable
+#!/usr/bin/env -S deno run -A --unstable
 
 // Copyright (c) 2022 Divy Srivastava.
 //
