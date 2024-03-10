@@ -15,8 +15,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#[cfg(feature = "typecheck")]
-mod check;
 #[macro_use]
 mod macro_util;
 // mod module_map;
@@ -32,21 +30,11 @@ fn main() {
     .nth(1)
     .expect("Invalid invocation. Usage: elsa <filename>");
 
-  #[cfg(feature = "typecheck")]
-  let j = {
-    let f = filename.clone();
-    std::thread::spawn(move || check::check(&f))
-  };
-
   #[cfg(feature = "typescript")]
   let source = strip::strip(&filename);
 
   #[cfg(not(feature = "typescript"))]
-  #[cfg(not(feature = "typecheck"))]
   let source = std::fs::read_to_string(&filename).expect("failed to read file");
-
-  #[cfg(feature = "typecheck")]
-  j.join().unwrap();
 
   let mut rt = runtime::Runtime::init();
   rt.setup_bindings();

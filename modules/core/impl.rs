@@ -20,3 +20,7 @@ pub use libc::*;
 pub fn print(msg: &str) {
   println!("{}", msg);
 }
+
+pub fn ptr(ptr: *mut c_void) -> usize {
+  ptr as usize
+}

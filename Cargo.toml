@@ -12,7 +12,6 @@ use_spidermonkey = ["mozjs"]
 use_hermes = ["libhermesabi-sys"]
 
 typescript = ["swc_common", "swc_ecma_codegen", "swc_ecma_parser", "swc_ecma_transforms_base", "swc_ecma_visit", "swc_ecma_transforms_typescript"]
-typecheck = ["stc_ts_builtin_types", "stc_ts_env", "stc_ts_file_analyzer", "stc_ts_lang_server", "stc_ts_module_loader", "stc_ts_type_checker", "swc_ecma_ast"]
 
 default = ["use_v8"]
 
@@ -37,16 +36,10 @@ swc_ecma_transforms_base = { version = "0.111.59", optional = true }
 swc_ecma_visit = { version = "0.80.20", optional = true }
 swc_ecma_transforms_typescript = { version = "0.159.22", optional = true }
 
-# type checker
-stc_ts_builtin_types = { git = "https://github.com/dudykr/stc.git", rev = "23dd114529f10c5d645887c055cd396d1bfe7b11", optional = true }
-stc_ts_env = { git = "https://github.com/dudykr/stc.git", rev = "23dd114529f10c5d645887c055cd396d1bfe7b11", optional = true }
-stc_ts_file_analyzer = { git = "https://github.com/dudykr/stc.git", rev = "23dd114529f10c5d645887c055cd396d1bfe7b11", optional = true }
-stc_ts_lang_server = { git = "https://github.com/dudykr/stc.git", rev = "23dd114529f10c5d645887c055cd396d1bfe7b11", optional = true }
-stc_ts_module_loader = { git = "https://github.com/dudykr/stc.git" , rev = "23dd114529f10c5d645887c055cd396d1bfe7b11", optional = true }
-stc_ts_type_checker = { git = "https://github.com/dudykr/stc.git", rev = "23dd114529f10c5d645887c055cd396d1bfe7b11", optional = true }
-swc_ecma_ast = { version = "0.94.20", optional = true }
-
 libc = "0.2.150"
+
+# io
+liburing = { path = "../uring-sys" }
 
 [profile.release]
 lto = true

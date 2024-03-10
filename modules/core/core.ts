@@ -23,6 +23,16 @@ const symbols: Definition[] = [
     parameters: ["string"],
     result: "void",
   },
+  {
+    name: "ptr",
+    parameters: ["pointer"],
+    result: "usize",
+  },
+  {
+    name: "mmap",
+    parameters: ["pointer", "u32", "u32", "u32", "i32", "i32"],
+    result: "pointer",
+  },
   // // kqueue
   // {
   //   name: "kqueue",
@@ -78,6 +88,6 @@ const symbols: Definition[] = [
 
 export default {
   symbols,
-  name: "loop",
+  name: "core",
   output: new URL("mod.rs", import.meta.url).pathname,
 };

@@ -15,8 +15,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import loop from "./loop/loop.ts";
+import core from "./core/core.ts";
+import io from "./io/io.ts";
 
 export default [
-  loop,
+  core,
+  io,
 ];

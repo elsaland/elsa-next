@@ -101,7 +101,7 @@ function fastValues(ty: string, idx: number) {
 function toV8(result: string) {
   if (result === "void") return "v8::undefined(scope).into()";
 
-  return `v8::Number::new(scope, result as _).into()`;
+  return `v8::Number::new(scope, result as u64 as _).into()`;
 }
 
 function fastParameterValue(ty: string) {
