@@ -54,6 +54,16 @@ const Accept = 1;
 const Read = 2;
 const Write = 3;
 
+function usrData(tok, data) {
+
+const usr_data = new Uint8Array(8);
+const view = new DataView(usr_data.buffer);
+
+  view.setUint32(0, tok, true);
+  view.setUint32(4, data, true);
+  return usr_data;
+}
+
 function add_accept_request(
   sock,
   addr,
@@ -68,7 +78,7 @@ function add_accept_request(
 
   io_uring_prep_accept(sqe, sock, addr, addrlen, 0);
 
-  io_uring_sqe_set_data(sqe, Accept);
+  io_uring_sqe_set_data(sqe, usrData(Accept, 0));
   io_uring_submit(ring);
 }
 
@@ -81,7 +91,7 @@ function add_read_request(sock) {
   const buf = new ArrayBuffer(1024);
   io_uring_prep_readv(sqe, sock, buf, 1, 0);
 
-  io_uring_sqe_set_data(sqe, Read);
+  io_uring_sqe_set_data(sqe, usrData(Read, sock));
   io_uring_submit(ring);
 }
 
@@ -90,6 +100,7 @@ Content-Length: 12
 Content-Type: text/plain
 
 Hello, World`;
+
 const HTTP_RESPONSE_BUF = HTTP_RESPONSE.split("").map((c) => c.charCodeAt(0));
 
 function add_write_request(sock) {
@@ -108,32 +119,39 @@ function add_write_request(sock) {
 
   io_uring_prep_writev(sqe, sock, iovec, 1, 0);
 
-  io_uring_sqe_set_data(sqe, Write);
+  io_uring_sqe_set_data(sqe, usrData(Write, sock));
   io_uring_submit(ring);
 }
 
-const cqedata = new Uint8Array(4 * 2);
+const cqedata = new Uint8Array(4 * 3);
 const cqedata_v = new DataView(cqedata.buffer);
 
 const client_sockaddr = new ArrayBuffer(16);
 add_accept_request(sock, client_sockaddr);
 
-let fd = -1;
+let fd;
 for (;;) {
   io_uring_wait_cqe2(ring, cqedata);
+
   const type = cqedata_v.getUint32(0, true);
   switch (type) {
     case Accept:
       add_accept_request(sock, client_sockaddr);
-
-      const req = cqedata_v.getUint32(4, true);
-      fd = req;
+      const req = cqedata_v.getUint32(8, true);
+      if (req < 0) {
+        throw new Error("Accept failed");
+      }
       add_read_request(req);
+      print("Accept done");
       break;
     case Read:
+      fd = cqedata_v.getUint32(4, true);
       add_write_request(fd);
+      print("Read done");
       break;
     case Write:
+      fd = cqedata_v.getUint32(4, true);
+      print("Write done");
       close(fd);
       break;
     default:
