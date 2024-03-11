@@ -307,7 +307,6 @@ name = "elsa"
 version = "0.1.0"
 dependencies = [
  "libc",
- "libhermesabi-sys",
  "liburing",
  "mozjs",
  "quickjs-ng-sys",
@@ -591,14 +590,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9c198f91728a82281a64e1f4f9eeb25d82cb32a5de251c6bd1b5154d63a8e7bd"
 
 [[package]]
-name = "libhermesabi-sys"
-version = "0.1.1"
-dependencies = [
- "bindgen 0.65.1",
- "cmake",
-]
-
-[[package]]
 name = "libloading"
 version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -611,6 +602,7 @@ dependencies = [
 [[package]]
 name = "liburing"
 version = "2.5.0"
+source = "git+https://github.com/littledivy/uring-sys#1e8be7cfd1f7869dbf19dfbccb98753915268679"
 dependencies = [
  "bindgen 0.69.4",
  "cc",

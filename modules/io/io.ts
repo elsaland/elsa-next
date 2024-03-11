@@ -57,6 +57,11 @@ const symbols: Definition[] = [
     result: "void",
   },
   {
+    name: "io_uring_prep_send_zc",
+    parameters: ["pointer", "i32", "pointer", "i32", "i32", "i32"],
+    result: "void",
+  },
+  {
     name: "io_uring_wait_cqe",
     parameters: ["pointer", "pointer"],
     result: "i32",
@@ -71,7 +76,12 @@ const symbols: Definition[] = [
   {
     name: "io_uring_wait_cqe2",
     parameters: ["pointer", "pointer"],
-    result: "void",
+    result: "i32",
+  },
+  {
+    name: "io_uring_cqe_create_data",
+    parameters: ["u32", "u32"],
+    result: "pointer",
   },
 
   // net

@@ -1,0 +1,10 @@
+# flyctl launch added from .gitignore
+target
+.stc
+
+**/notes.md
+
+# flyctl launch added from target/debug/build/mozjs_sys-488ac233440d36a2/out/build/_virtualenvs/build/.gitignore
+# created by virtualenv automatically
+target/debug/build/mozjs_sys-488ac233440d36a2/out/build/_virtualenvs/build/**/*
+fly.toml

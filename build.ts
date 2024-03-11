@@ -46,22 +46,22 @@ function maybeArgs() {
 async function debug() {
   const maybeFlags = maybeArgs();
   if (maybeFlags.length > 0) {
-    await $`./build/main.ts && cargo fmt && cargo build --no-default-features --features ${
+    await $`./build/main.ts &&  cargo build --no-default-features --features ${
       maybeFlags.join(",")
     } -vv`;
   } else {
-    await $`./build/main.ts && cargo fmt && cargo build`;
+    await $`./build/main.ts &&  cargo build`;
   }
 }
 
 async function release() {
   const maybeFlags = maybeArgs();
   if (maybeFlags.length > 0) {
-    await $`./build/main.ts && cargo fmt && cargo build --release --no-default-features --features ${
+    await $`./build/main.ts &&  cargo build --release --no-default-features --features ${
       maybeFlags.join(",")
     } -vv`;
   } else {
-    await $`./build/main.ts && cargo fmt && cargo build --release`;
+    await $`./build/main.ts &&  cargo build --release`;
   }
 }
 

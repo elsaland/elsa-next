@@ -112,6 +112,17 @@ crate::cfg_v8!(
         .into(),
     );
     global.set(
+      v8::String::new(scope, "io_uring_prep_send_zc")
+        .unwrap()
+        .into(),
+      v8::FunctionTemplate::builder_raw(
+        slow_io_uring_prep_send_zc_.map_fn_to(),
+      )
+      .build_fast(scope, &FAST_io_uring_prep_send_zc, None, None, None)
+      // .build(scope)
+      .into(),
+    );
+    global.set(
       v8::String::new(scope, "io_uring_wait_cqe").unwrap().into(),
       v8::FunctionTemplate::builder_raw(slow_io_uring_wait_cqe_.map_fn_to())
         .build_fast(scope, &FAST_io_uring_wait_cqe, None, None, None)
@@ -131,6 +142,17 @@ crate::cfg_v8!(
         .build_fast(scope, &FAST_io_uring_wait_cqe2, None, None, None)
         // .build(scope)
         .into(),
+    );
+    global.set(
+      v8::String::new(scope, "io_uring_cqe_create_data")
+        .unwrap()
+        .into(),
+      v8::FunctionTemplate::builder_raw(
+        slow_io_uring_cqe_create_data_.map_fn_to(),
+      )
+      .build_fast(scope, &FAST_io_uring_cqe_create_data, None, None, None)
+      // .build(scope)
+      .into(),
     );
     global.set(
       v8::String::new(scope, "socket").unwrap().into(),
@@ -671,6 +693,83 @@ crate::cfg_v8!(
     rv.set(v8::undefined(scope).into());
   }
 
+  pub struct io_uring_prep_send_zc_;
+  const FAST_io_uring_prep_send_zc: fast_api::FastFunction =
+    fast_api::FastFunction::new(
+      &[
+        fast_api::Type::V8Value,
+        fast_api::Type::Uint64,
+        fast_api::Type::Int32,
+        fast_api::Type::Uint64,
+        fast_api::Type::Int32,
+        fast_api::Type::Int32,
+        fast_api::Type::Int32,
+      ],
+      fast_api::CType::Void,
+      fast_io_uring_prep_send_zc_ as *const _,
+    );
+
+  fn fast_io_uring_prep_send_zc_(
+    _: v8::Local<v8::Object>,
+    p0: u64,
+    p1: i32,
+    p2: u64,
+    p3: i32,
+    p4: i32,
+    p5: i32,
+  ) -> () {
+    unsafe {
+      r#impl::io_uring_prep_send_zc(
+        p0 as *const u8 as _,
+        p1 as _,
+        p2 as *const u8 as _,
+        p3 as _,
+        p4 as _,
+        p5 as _,
+      ) as _
+    }
+  }
+
+  fn slow_io_uring_prep_send_zc_(
+    scope: &mut v8::HandleScope,
+    args: v8::FunctionCallbackArguments,
+    mut rv: v8::ReturnValue,
+  ) {
+    let p0 = {
+      let v = args.get(0);
+      if v.is_array_buffer_view() {
+        let view =
+          v8::Local::<v8::ArrayBufferView>::try_from(args.get(0)).unwrap();
+        let buffer = view.buffer(scope).unwrap();
+        let store = buffer.data().unwrap().as_ptr() as *mut u8;
+        unsafe { store.add(view.byte_offset()) as _ }
+      } else {
+        let i = args.get(0).number_value(scope).unwrap() as u64;
+        i as *const u8 as _
+      }
+    };
+    let p1 = args.get(1).uint32_value(scope).unwrap() as _;
+    let p2 = {
+      let v = args.get(2);
+      if v.is_array_buffer_view() {
+        let view =
+          v8::Local::<v8::ArrayBufferView>::try_from(args.get(2)).unwrap();
+        let buffer = view.buffer(scope).unwrap();
+        let store = buffer.data().unwrap().as_ptr() as *mut u8;
+        unsafe { store.add(view.byte_offset()) as _ }
+      } else {
+        let i = args.get(2).number_value(scope).unwrap() as u64;
+        i as *const u8 as _
+      }
+    };
+    let p3 = args.get(3).uint32_value(scope).unwrap() as _;
+    let p4 = args.get(4).uint32_value(scope).unwrap() as _;
+    let p5 = args.get(5).uint32_value(scope).unwrap() as _;
+    let result =
+      unsafe { r#impl::io_uring_prep_send_zc(p0, p1, p2, p3, p4, p5) };
+    rv.set(v8::undefined(scope).into());
+  }
+
   pub struct io_uring_wait_cqe_;
   const FAST_io_uring_wait_cqe: fast_api::FastFunction =
     fast_api::FastFunction::new(
@@ -789,7 +888,7 @@ crate::cfg_v8!(
         fast_api::Type::Uint64,
         fast_api::Type::Uint64,
       ],
-      fast_api::CType::Void,
+      fast_api::CType::Int32,
       fast_io_uring_wait_cqe2_ as *const _,
     );
 
@@ -797,7 +896,7 @@ crate::cfg_v8!(
     _: v8::Local<v8::Object>,
     p0: u64,
     p1: u64,
-  ) -> () {
+  ) -> i32 {
     unsafe {
       r#impl::io_uring_wait_cqe2(p0 as *const u8 as _, p1 as *const u8 as _)
         as _
@@ -836,7 +935,38 @@ crate::cfg_v8!(
       }
     };
     let result = unsafe { r#impl::io_uring_wait_cqe2(p0, p1) };
-    rv.set(v8::undefined(scope).into());
+    rv.set(v8::Number::new(scope, result as u64 as _).into());
+  }
+
+  pub struct io_uring_cqe_create_data_;
+  const FAST_io_uring_cqe_create_data: fast_api::FastFunction =
+    fast_api::FastFunction::new(
+      &[
+        fast_api::Type::V8Value,
+        fast_api::Type::Uint32,
+        fast_api::Type::Uint32,
+      ],
+      fast_api::CType::Uint64,
+      fast_io_uring_cqe_create_data_ as *const _,
+    );
+
+  fn fast_io_uring_cqe_create_data_(
+    _: v8::Local<v8::Object>,
+    p0: u32,
+    p1: u32,
+  ) -> u64 {
+    unsafe { r#impl::io_uring_cqe_create_data(p0 as _, p1 as _) as _ }
+  }
+
+  fn slow_io_uring_cqe_create_data_(
+    scope: &mut v8::HandleScope,
+    args: v8::FunctionCallbackArguments,
+    mut rv: v8::ReturnValue,
+  ) {
+    let p0 = args.get(0).uint32_value(scope).unwrap() as _;
+    let p1 = args.get(1).uint32_value(scope).unwrap() as _;
+    let result = unsafe { r#impl::io_uring_cqe_create_data(p0, p1) };
+    rv.set(v8::Number::new(scope, result as u64 as _).into());
   }
 
   pub struct socket_;
@@ -1163,6 +1293,27 @@ crate::cfg_quickjs!(
       panic!("failed to set property")
     }
     let f = unsafe {
+      q::JS_NewCFunctionData(
+        context,
+        Some(io_uring_prep_send_zc_),
+        6,
+        0,
+        1,
+        data,
+      )
+    };
+    if unsafe {
+      q::JS_SetPropertyStr(
+        context,
+        global_raw,
+        "io_uring_prep_send_zc ".as_ptr() as _,
+        f,
+      )
+    } < 0
+    {
+      panic!("failed to set property")
+    }
+    let f = unsafe {
       q::JS_NewCFunctionData(context, Some(io_uring_wait_cqe_), 2, 0, 1, data)
     };
     if unsafe {
@@ -1198,6 +1349,27 @@ crate::cfg_quickjs!(
         context,
         global_raw,
         "io_uring_wait_cqe2 ".as_ptr() as _,
+        f,
+      )
+    } < 0
+    {
+      panic!("failed to set property")
+    }
+    let f = unsafe {
+      q::JS_NewCFunctionData(
+        context,
+        Some(io_uring_cqe_create_data_),
+        2,
+        0,
+        1,
+        data,
+      )
+    };
+    if unsafe {
+      q::JS_SetPropertyStr(
+        context,
+        global_raw,
+        "io_uring_cqe_create_data ".as_ptr() as _,
         f,
       )
     } < 0
@@ -1546,6 +1718,47 @@ crate::cfg_quickjs!(
       tag: q::JS_TAG_UNDEFINED as _,
     }
   }
+  unsafe extern "C" fn io_uring_prep_send_zc_(
+    ctx: *mut q::JSContext,
+    _this: q::JSValue,
+    argc: i32,
+    argv: *mut q::JSValue,
+    _magic: i32,
+    data: *mut q::JSValue,
+  ) -> q::JSValue {
+    // assert!(argc == 6, "in io_uring_prep_send_zc");
+    let p0 = {
+      if q::JS_IsObject(*(argv.offset(0 as _))) != 0 {
+        let mut len = 0;
+        let val = *(argv.offset(0 as _));
+        q::JS_GetUint8Array(ctx, &mut len, val)
+      } else {
+        // Get number
+        (*(argv.offset(0 as _))).u.float64 as u64 as *mut u8
+      }
+    };
+    let p1 = (*(argv.offset(1 as _))).u.int32;
+    let p2 = {
+      if q::JS_IsObject(*(argv.offset(2 as _))) != 0 {
+        let mut len = 0;
+        let val = *(argv.offset(2 as _));
+        q::JS_GetUint8Array(ctx, &mut len, val)
+      } else {
+        // Get number
+        (*(argv.offset(2 as _))).u.float64 as u64 as *mut u8
+      }
+    };
+    let p3 = (*(argv.offset(3 as _))).u.int32;
+    let p4 = (*(argv.offset(4 as _))).u.int32;
+    let p5 = (*(argv.offset(5 as _))).u.int32;
+    let result = r#impl::io_uring_prep_send_zc(
+      p0 as _, p1 as _, p2 as _, p3 as _, p4 as _, p5 as _,
+    );
+    q::JSValue {
+      u: q::JSValueUnion { int32: 0 },
+      tag: q::JS_TAG_UNDEFINED as _,
+    }
+  }
   unsafe extern "C" fn io_uring_wait_cqe_(
     ctx: *mut q::JSContext,
     _this: q::JSValue,
@@ -1647,9 +1860,23 @@ crate::cfg_quickjs!(
     };
     let result = r#impl::io_uring_wait_cqe2(p0 as _, p1 as _);
     q::JSValue {
-      u: q::JSValueUnion { int32: 0 },
-      tag: q::JS_TAG_UNDEFINED as _,
+      u: q::JSValueUnion { int32: result as _ },
+      tag: q::JS_TAG_INT as _,
     }
+  }
+  unsafe extern "C" fn io_uring_cqe_create_data_(
+    ctx: *mut q::JSContext,
+    _this: q::JSValue,
+    argc: i32,
+    argv: *mut q::JSValue,
+    _magic: i32,
+    data: *mut q::JSValue,
+  ) -> q::JSValue {
+    // assert!(argc == 2, "in io_uring_cqe_create_data");
+    let p0 = (*(argv.offset(0 as _))).u.int32;
+    let p1 = (*(argv.offset(1 as _))).u.int32;
+    let result = r#impl::io_uring_cqe_create_data(p0 as _, p1 as _);
+    compile_error!("TODO: implement");
   }
   unsafe extern "C" fn socket_(
     ctx: *mut q::JSContext,
@@ -1883,6 +2110,19 @@ crate::cfg_jsc!(
       JSObjectMakeFunctionWithCallback(
         context,
         std::ptr::null_mut() as _,
+        Some(io_uring_prep_send_zc_),
+      )
+    };
+    let name = unsafe {
+      JSStringCreateWithUTF8CString("io_uring_prep_send_zc ".as_ptr() as _)
+    };
+    let mut exception: JSValueRef = std::ptr::null_mut();
+    unsafe { JSObjectSetProperty(context, obj, name, func, 0, &mut exception) }
+
+    let func = unsafe {
+      JSObjectMakeFunctionWithCallback(
+        context,
+        std::ptr::null_mut() as _,
         Some(io_uring_wait_cqe_),
       )
     };
@@ -1914,6 +2154,19 @@ crate::cfg_jsc!(
     };
     let name = unsafe {
       JSStringCreateWithUTF8CString("io_uring_wait_cqe2 ".as_ptr() as _)
+    };
+    let mut exception: JSValueRef = std::ptr::null_mut();
+    unsafe { JSObjectSetProperty(context, obj, name, func, 0, &mut exception) }
+
+    let func = unsafe {
+      JSObjectMakeFunctionWithCallback(
+        context,
+        std::ptr::null_mut() as _,
+        Some(io_uring_cqe_create_data_),
+      )
+    };
+    let name = unsafe {
+      JSStringCreateWithUTF8CString("io_uring_cqe_create_data ".as_ptr() as _)
     };
     let mut exception: JSValueRef = std::ptr::null_mut();
     unsafe { JSObjectSetProperty(context, obj, name, func, 0, &mut exception) }
@@ -2243,6 +2496,44 @@ crate::cfg_jsc!(
       r#impl::io_uring_prep_writev(p0 as _, p1 as _, p2 as _, p3 as _, p4 as _);
     JSValueMakeUndefined(ctx)
   }
+  unsafe extern "C" fn io_uring_prep_send_zc_(
+    ctx: JSContextRef,
+    _function: JSObjectRef,
+    _this_object: JSObjectRef,
+    argument_count: size_t,
+    arguments: *const JSValueRef,
+    exception: *mut JSValueRef,
+  ) -> JSValueRef {
+    // assert!(argument_count <= 6, "io_uring_prep_send_zc expects atleast 6 arguments");
+    let p0 = if JSValueIsObject(ctx, *(arguments.offset(0) as *mut _)) {
+      JSObjectGetTypedArrayBytesPtr(
+        ctx,
+        *(arguments.offset(0) as *mut _),
+        exception,
+      ) as *mut ()
+    } else {
+      JSValueToNumber(ctx, *(arguments.offset(0) as *mut _), exception) as u64
+        as *mut ()
+    };
+    let p1 = JSValueToNumber(ctx, *(arguments.offset(1 as _)), exception);
+    let p2 = if JSValueIsObject(ctx, *(arguments.offset(2) as *mut _)) {
+      JSObjectGetTypedArrayBytesPtr(
+        ctx,
+        *(arguments.offset(2) as *mut _),
+        exception,
+      ) as *mut ()
+    } else {
+      JSValueToNumber(ctx, *(arguments.offset(2) as *mut _), exception) as u64
+        as *mut ()
+    };
+    let p3 = JSValueToNumber(ctx, *(arguments.offset(3 as _)), exception);
+    let p4 = JSValueToNumber(ctx, *(arguments.offset(4 as _)), exception);
+    let p5 = JSValueToNumber(ctx, *(arguments.offset(5 as _)), exception);
+    let result = r#impl::io_uring_prep_send_zc(
+      p0 as _, p1 as _, p2 as _, p3 as _, p4 as _, p5 as _,
+    );
+    JSValueMakeUndefined(ctx)
+  }
   unsafe extern "C" fn io_uring_wait_cqe_(
     ctx: JSContextRef,
     _function: JSObjectRef,
@@ -2337,7 +2628,21 @@ crate::cfg_jsc!(
         as *mut ()
     };
     let result = r#impl::io_uring_wait_cqe2(p0 as _, p1 as _);
-    JSValueMakeUndefined(ctx)
+    JSValueMakeNumber(ctx, result as _)
+  }
+  unsafe extern "C" fn io_uring_cqe_create_data_(
+    ctx: JSContextRef,
+    _function: JSObjectRef,
+    _this_object: JSObjectRef,
+    argument_count: size_t,
+    arguments: *const JSValueRef,
+    exception: *mut JSValueRef,
+  ) -> JSValueRef {
+    // assert!(argument_count <= 2, "io_uring_cqe_create_data expects atleast 2 arguments");
+    let p0 = JSValueToNumber(ctx, *(arguments.offset(0 as _)), exception);
+    let p1 = JSValueToNumber(ctx, *(arguments.offset(1 as _)), exception);
+    let result = r#impl::io_uring_cqe_create_data(p0 as _, p1 as _);
+    compile_error!("TODO: implement")
   }
   unsafe extern "C" fn socket_(
     ctx: JSContextRef,
