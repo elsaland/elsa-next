@@ -68,7 +68,7 @@ const features = [
   ],
   [
     "",
-    "Engine agnostic. Choose your JS engine! V8, JavaScript Core, QuickJS, etc.",
+    "Engine agnostic. Choose your JS engine! V8, JSC, Hermes, QuickJS, etc.",
   ],
   [
     "",
@@ -153,7 +153,7 @@ function Home() {
       </div>
 
       {/* Features list */}
-      <div class={tw`mt-8 max-w-3xl mx-auto`}>
+      <div class={tw`mt-8 max-w-3xl mx-auto mb-8`}>
         <ul class={tw`mt-4 space-y-4`}>
           {features.map(([title, description]) => (
             <li class={tw`flex`}>
@@ -165,18 +165,8 @@ function Home() {
           ))}
         </ul>
       </div>
-      {
-        /* Small build walkthrough
-      <script
-        src="https://asciinema.org/a/545330.js"
-        data-theme="asciinema"
-        data-size="big"
-        data-autoplay="true"
-        id="asciicast-545330"
-        async
-      >
-      </script> */
-      }
+
+      <script src="https://gist.github.com/littledivy/79f6736806a18aafffddab70e478063e.js"></script>
       </div>
   );
 }
