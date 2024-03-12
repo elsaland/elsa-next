@@ -5,6 +5,7 @@ import { serve } from "std/http";
 import { router } from "rutt";
 import { h, html, tw } from "nanossr";
 import { css } from "twind/css";
+import { init, mdToHtml, setCodeHighlighter } from "https://esm.sh/md4w";
 
 function Button({ children, ...props }) {
   return (
@@ -81,9 +82,7 @@ const features = [
 
 function Home() {
   return (
-    <main
-      class={tw`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16`}
-    >
+    <div>
       <div class={tw`max-w-3xl mx-auto`}>
         <h1 class={tw`text-4xl font-bold`}>Elsa</h1>
         <p class={tw`text-gray-500 dark:text-gray-200`}>
@@ -127,8 +126,6 @@ function Home() {
             class={tw`inline-block ml-2`}
           />
         </div>
-
-        <GitHub class={tw`absolute top-0 right-0 mt-4 mr-4`} />
       </div>
 
       <div class={tw`mt-8 max-w-3xl mx-auto`}>
@@ -168,7 +165,6 @@ function Home() {
           ))}
         </ul>
       </div>
-
       {
         /* Small build walkthrough
       <script
@@ -181,7 +177,7 @@ function Home() {
       >
       </script> */
       }
-    </main>
+      </div>
   );
 }
 
@@ -220,11 +216,53 @@ function memoize<T>(fn: () => T): () => T {
 
 const start = typeof Deno.serve !== "undefined" ? Deno.serve : serve;
 
-const home = memoize(() => html(() => <Home />, { tw: options }));
+const home = memoize(() => html(() => <Layout><Home /></Layout>, { tw: options }));
+const md = (md: string) => html(() => <Layout><Markdown md={md} /></Layout>, { tw: options });
+
+function Layout({ children }: { children: string }) {
+  return (
+    <div>
+        <GitHub class={tw`absolute top-0 right-0 mt-4 mr-4`} />
+        <a href="/docs" class={tw`absolute top-0 right-0 mt-5 mr-16 link underline`}>
+          Documentation
+        </a>
+    <main
+      class={tw`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-12 lg:py-16`}
+    >
+       {children}
+    </main>
+
+    </div>
+  );
+}
+
+function Markdown({ md }: { md: string }) {
+  return (
+     <div class={tw`max-w-3xl mx-auto`}>
+        <article class={tw`prose`}>
+          <div dangerouslySetInnerHTML={{ __html: md }} />
+        </article>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/prism.min.js" integrity="sha512-UOoJElONeUNzQbbKQbjldDf9MwOHqxNz49NNJJ1d90yp+X9edsHyJoAs6O4K19CZGaIdjI5ohK+O2y5lBTW6uQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/themes/prism.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/9000.0.1/components/prism-javascript.min.js" />
+    </div>
+  )
+}
+
+await init();
+setCodeHighlighter((lang, code) => {
+  return `<pre class="pre"><code class="language-${lang}">${code}</code></pre>`;
+});
 
 await serve(
   router({
     "/": () =>
       new Response(home(), { headers: { "content-type": "text/html" } }),
+    "*": async (req) => {
+      const pathname = new URL(req.url).pathname;
+      const file = await Deno.readTextFile(`.${pathname}.md`);
+      const html = mdToHtml(file);
+      return new Response(md(html), { headers: { "content-type": "text/html" } });
+    }
   }) as Deno.ServeHandler,
 );
